@@ -64,12 +64,14 @@ function LeftNav() {
                   <span>Playlist</span>
                 </div>
               </NavLink>
-              <NavLink to={"/channel/YourChannelName"}>
-                <div className="flex items-center gap-x-4 px-5 py-2 hover:bg-slate-200 rounded-lg">
-                  <GrChannel className="text-2xl" />
-                  <span>Your Channel</span>
-                </div>
-              </NavLink>
+              {loginStatus && accessToken && user.id && (
+                <NavLink to={`/channel/${user.username}`}>
+                  <div className="flex items-center gap-x-4 px-5 py-2 hover:bg-slate-200 rounded-lg">
+                    <GrChannel className="text-2xl" />
+                    <span>Your Channel</span>
+                  </div>
+                </NavLink>
+              )}
               <NavLink to={"/channel/YourChannelName/videos"}>
                 <div className="flex items-center gap-x-4 px-5 py-2 hover:bg-slate-200 rounded-lg">
                   <MdOndemandVideo className="text-2xl" />

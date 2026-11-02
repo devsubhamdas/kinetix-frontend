@@ -11,10 +11,26 @@ function ChannelVideosPage() {
     isLoading,
   } = useGetAllVideosByChannelNameQuery(channelName);
 
+  useEffect(() => {
+    if (error) {
+      console.error("ERROR:: ", error);
+    }
+  }, []);
+
   return (
     <div className="mt-3 mb-20">
-      {isLoading && <div>loading...</div>}
-      {error && <div>ERROR:: {error.error}</div>}
+      {/* skeleton loading  */}
+      {isLoading && (
+        <GridContainer colWidth="14rem">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-24 animate-pulse bg-gray-100 rounded-xl"
+            ></div>
+          ))}
+        </GridContainer>
+      )}
+      {/* {error && <div>ERROR:: {error.error}</div>} */}
       {videos && (
         <GridContainer colWidth="14rem">
           <VideoList

@@ -12,6 +12,15 @@ import CommentList from "./comment/CommentList.jsx";
 import PostCard from "./post/PostCard.jsx";
 import PostList from "./post/PostList.jsx";
 import LoginModal from "./modal/LoginModal.jsx";
+import HomePageSkeleton from "./skeleton/HomePageSkeleton.jsx";
+import {
+  VideoSectionSkeleton,
+  CommentSectionSkeleton,
+  RecommendVideoSectionSkeleton,
+  WatchPageSkeleton,
+} from "./skeleton/WatchPageSkeleton.jsx";
+
+import ChannelPageSkeleton from "./skeleton/ChannelPageSkeleton.jsx";
 
 export {
   BottomNav,
@@ -27,5 +36,11 @@ export {
   PostCard,
   PostList,
   LoginModal,
-  Protected
+  Protected,
+  HomePageSkeleton,
+  VideoSectionSkeleton,
+  CommentSectionSkeleton,
+  RecommendVideoSectionSkeleton,
+  WatchPageSkeleton,
+  ChannelPageSkeleton,
 };

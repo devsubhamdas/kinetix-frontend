@@ -7,11 +7,16 @@ import { useGetChannelInfoAndStatsQuery } from "../../api/userApi";
 import Banner from "./components/Banner.jsx";
 import InfoAndStats from "./components/InfoAndStats.jsx";
 import ChannelPageNavBar from "./components/ChannelPageNavBar.jsx";
+import { ChannelPageSkeleton } from "../../components/index.js";
 
 function ChannelLayout() {
   const { username: channelName } = useParams();
 
-  const { data: channel, refetch } = useGetChannelInfoAndStatsQuery({
+  const {
+    data: channel,
+    isLoading: channelLoading,
+    refetch,
+  } = useGetChannelInfoAndStatsQuery({
     channelName,
     accessToken: localStorage.getItem("accessToken"),
   });
@@ -22,7 +27,14 @@ function ChannelLayout() {
     refetch();
   }, [authState]);
 
-  if (!channel) {
+  if (channelLoading) {
+    return (
+      <>
+        <ChannelPageSkeleton />
+      </>
+    );
+  }
+  if (!channelLoading && !channel) {
     return (
       <>
         <div>channel not found</div>

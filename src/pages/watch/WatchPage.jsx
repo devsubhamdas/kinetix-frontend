@@ -20,6 +20,12 @@ import SocialActions from "./components/SocialActions.jsx";
 import CommentSection from "./components/CommentSection.jsx";
 import VideoSection from "./components/VideoSection.jsx";
 import RecommendVideoSection from "./components/RecommendVideoSection.jsx";
+import {
+  VideoSectionSkeleton,
+  CommentSectionSkeleton,
+  RecommendVideoSectionSkeleton,
+  WatchPageSkeleton,
+} from "../../components/index.js";
 
 import {
   useGetVideoByIdQuery,
@@ -83,8 +89,8 @@ function WatchPage() {
   // fetch recommended videos
   const {
     data: videos,
-    error: videosError,
-    isLoading: videosIsLoading,
+    error: recommendedVideosError,
+    isLoading: recommendedVideosIsLoading,
   } = useGetVideosByRecommendationQuery();
 
   // scroll to top on if videoFile changes
@@ -98,17 +104,31 @@ function WatchPage() {
     refetchChannelInfoAndStats();
   }, [loginStatus]);
 
+  useEffect(() => {
+    if (videoError) {
+      console.error("VideoError::", videoError);
+    }
+    if (recommendedVideosError) {
+      console.error("RecommendedVideosError::", recommendedVideosError);
+    }
+    if (commentsError) {
+      console.error("CommentsError::", commentsError);
+    }
+  }, []);
+
   // try to authenticate on first render
   const isAuthenticated = useSelector((state) => state.global.isAuthenticated);
   const { initializeAuth } = useAuth();
   initializeAuth();
 
-  if (!isAuthenticated)
-    return (
-      <>
-        <div>Authentication in progress, please wait...</div>
-      </>
-    );
+  // if (!isAuthenticated)
+  //   return (
+  //     <>
+  //       <div>Authentication in progress, please wait...</div>
+  //     </>
+  //   );
+
+  if (!isAuthenticated) return <WatchPageSkeleton />;
 
   return (
     <>
@@ -118,8 +138,12 @@ function WatchPage() {
         isModalOpen={isLoginModalOpen}
       />
       <main className="max-w-[1800px] lg:mx-auto mb-5 md:mb-9 lg:mb-16">
-        {videoIsLoading && <div>loading...</div>}
-        {videoError && <div>ERROR::{videoError.error}</div>}
+        {videoIsLoading && (
+          <div>
+            <VideoSectionSkeleton />
+          </div>
+        )}
+        {/* {videoError && <div>ERROR::{videoError.error}</div>} */}
         {!videoIsLoading && video && (
           <FlexContainer
             className={"flex-col md:flex-row"}
@@ -158,14 +182,24 @@ function WatchPage() {
                   refId={id}
                   refetch={refetchComments}
                 />
-                {commentsIsLoading && <div>loading...</div>}
-                {commentsError && <div>ERROR:: {commentsError.error}</div>}
+                {commentsIsLoading && (
+                  <div>
+                    <CommentSectionSkeleton />
+                  </div>
+                )}
+                {/* {commentsError && <div>ERROR:: {commentsError.error}</div>} */}
                 {comments && <CommentList comments={comments.data} />}
               </CommentSection>
             </VideoSection>
             <RecommendVideoSection>
-              {videosIsLoading && <div>loading...</div>}
-              {videosError && <div>ERROR:: {videosError.error}</div>}
+              {recommendedVideosIsLoading && (
+                <div>
+                  <RecommendVideoSectionSkeleton />
+                </div>
+              )}
+              {/* {recommendedVideosError && (
+                <div>ERROR:: {recommendedVideosError.error}</div>
+              )} */}
               {videos && (
                 <VideoList
                   videos={videos.data}

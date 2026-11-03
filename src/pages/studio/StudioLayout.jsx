@@ -13,14 +13,15 @@ function StudioLeftNav() {
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
 
-  const {
-    data: channel,
-    isLoading: channelLoading,
-    refetch,
-  } = useGetChannelInfoAndStatsQuery({
-    channelName: user?.username,
-    accessToken: localStorage.getItem("accessToken"),
-  });
+  const { data: channel } = useGetChannelInfoAndStatsQuery(
+    {
+      channelName: user?.username,
+      accessToken: localStorage.getItem("accessToken"),
+    },
+    {
+      skip: !user,
+    }
+  );
 
   return (
     <>

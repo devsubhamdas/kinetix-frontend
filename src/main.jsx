@@ -5,6 +5,7 @@ import Layout from "./Layout.jsx";
 import {
   createBrowserRouter,
   createRoutesFromElements,
+  Navigate,
   Route,
   RouterProvider,
 } from "react-router-dom";
@@ -64,6 +65,8 @@ const router = createBrowserRouter(
           element={<StudioContentPage />}
         />
       </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
     </>
   )
 );

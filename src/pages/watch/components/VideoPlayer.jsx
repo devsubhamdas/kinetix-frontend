@@ -68,7 +68,7 @@ export default function ImageKitVideoPlayer({ video }) {
 
     const player = videoPlayer(
       el,
-      { imagekitId: "YOUR_IMAGEKIT_ID", seekThumbnails: false },
+      { imagekitId: import.meta.env.VITE_IMAGEKIT_ID, seekThumbnails: false },
       { controls: true, fluid: true }
     );
     player.src({ src: url, poster: { src: posterUrl } });

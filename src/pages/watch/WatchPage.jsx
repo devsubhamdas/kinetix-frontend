@@ -150,7 +150,7 @@ function WatchPage() {
             gapX="md:gap-x-5 lg:gap-x-10"
           >
             <VideoSection>
-              <ImageKitVideoPlayer video={video} />
+              <VideoPlayer video={video} />
               <VideoInfoAndStats
                 thumbnail={video?.data.thumbnail}
                 title={video?.data.title}

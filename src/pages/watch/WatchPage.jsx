@@ -13,7 +13,7 @@ import {
 } from "../../components";
 
 // local components
-import VideoPlayer from "./components/VideoPlayer.jsx";
+import { VideoPlayer, ImageKitVideoPlayer } from "./components/VideoPlayer.jsx";
 import VideoInfoAndStats from "./components/VideoInfoAndStats.jsx";
 import ChannelInfoAndStats from "./components/ChannelInfoAndStats.jsx";
 import SocialActions from "./components/SocialActions.jsx";
@@ -114,7 +114,7 @@ function WatchPage() {
     if (commentsError) {
       console.error("CommentsError::", commentsError);
     }
-  }, []);
+  }, [videoError, recommendedVideosError, commentsError]);
 
   // try to authenticate on first render
   const isAuthenticated = useSelector((state) => state.global.isAuthenticated);
@@ -150,7 +150,7 @@ function WatchPage() {
             gapX="md:gap-x-5 lg:gap-x-10"
           >
             <VideoSection>
-              <VideoPlayer video={video} />
+              <ImageKitVideoPlayer video={video} />
               <VideoInfoAndStats
                 thumbnail={video?.data.thumbnail}
                 title={video?.data.title}

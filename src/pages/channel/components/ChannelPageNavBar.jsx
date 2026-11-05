@@ -33,27 +33,25 @@ function ChannelPageNavBar() {
   ];
 
   return (
-    <>
-      <div className="sticky top-[72px] mt-5 mx-2.5 lg:mx-0 bg-white border-b">
-        <ul className="flex gap-5 lg:gap-x-7 font-semibold text-gray-500 overflow-x-auto no-scrollbar">
-          {links.map((link) => (
-            <li key={link.name}>
-              <NavLink
-                to={link.slug}
-                className={(isActive) =>
-                  isActive && location.pathname === link.slug
-                    ? "block border-b-2 border-b-gray-900 text-black"
-                    : "block hover:border-b-2 hover:border-b-gray-400"
-                }
-                end
-              >
-                <div className="md:py-1 lg:py-2">{link.name}</div>
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </>
+    <div className="sticky top-[72px] mt-5 mx-2.5 lg:mx-0 border-b bg-white border-neutral-200 dark:bg-neutral-900 dark:border-neutral-700">
+      <ul className="flex gap-5 lg:gap-x-7 font-semibold overflow-x-auto no-scrollbar text-gray-500 dark:text-neutral-400">
+        {links.map((link) => (
+          <li key={link.name}>
+            <NavLink
+              to={link.slug}
+              end
+              className={({ isActive }) =>
+                isActive
+                  ? "block border-b-2 border-b-gray-900 text-black dark:border-b-neutral-100 dark:text-white"
+                  : "block hover:border-b-2 hover:border-b-gray-400 dark:hover:border-b-neutral-500"
+              }
+            >
+              <div className="md:py-1 lg:py-2">{link.name}</div>
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

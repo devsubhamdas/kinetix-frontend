@@ -4,6 +4,11 @@ import useSubscription from "../../../hooks/useSubscription.js";
 import { useSelector, useDispatch } from "react-redux";
 import { openLoginModal } from "../../../features/global/globalSlice";
 
+const buttonClass = `font-medium text-sm px-2.5 py-1.5 lg:text-base lg:px-3.5 rounded-full
+  bg-gray-900 hover:bg-gray-800 text-white
+  disabled:opacity-60 disabled:cursor-not-allowed
+  dark:bg-neutral-100 dark:hover:bg-neutral-200 dark:text-neutral-900`;
+
 function ChannelInfoAndStats({
   channel = "",
   profile = "",
@@ -16,70 +21,65 @@ function ChannelInfoAndStats({
   const {
     subscribeOnClick,
     unsubscribeOnClick,
-    subscribeState: {
-      isLoading: subscribeIsLoading,
-    },
-    unsubscribeState: {
-      isLoading: unsubscribeIsLoading,
-    },
+    subscribeState: { isLoading: subscribeIsLoading },
+    unsubscribeState: { isLoading: unsubscribeIsLoading },
   } = useSubscription();
 
   return (
-    <>
-      <div className="flex items-center gap-x-5 mt-3">
-        <div>
-          <NavLink to={`/channel/${channel}`}>
-            <img
-              src={profile}
-              alt=""
-              className="w-11 aspect-square object-cover object-center rounded-full"
-            />
-          </NavLink>
+    <div className="flex items-center gap-x-5 mt-3 text-neutral-900 dark:text-neutral-100">
+      <div>
+        <NavLink to={`/channel/${channel}`}>
+          <img
+            src={profile || "/temp/default-avatar.png"}
+            alt=""
+            className="w-11 aspect-square object-cover object-center rounded-full bg-gray-100 dark:bg-neutral-800"
+          />
+        </NavLink>
+      </div>
+
+      <div className="flex flex-1">
+        <div className="mr-auto">
+          <div className="sm:text-sm md:text-base lg:text-lg font-medium">
+            <NavLink to={`/channel/${channel}`}>{channel}</NavLink>
+          </div>
+          <div className="text-xs md:text-sm -mt-1 text-gray-500 dark:text-neutral-400">
+            {subscribersCount} subscribers
+          </div>
         </div>
-        <div className="flex flex-1">
-          <div className="mr-auto">
-            <div className="sm:text-sm md:text-base lg:text-lg font-medium">
-              <NavLink to={`/channel/${channel}`}>{channel}</NavLink>
-            </div>
-            <div className="text-xs md:text-sm -mt-1 text-gray-500">
-              {subscribersCount} subscribers
-            </div>
-          </div>
-          <div>
-            {!isSubscribed && (
-              <button
-                className="bg-gray-900 hover:bg-gray-800 text-white font-medium text-sm px-2.5 py-1.5 lg:text-base lg:px-3.5 rounded-full"
-                onClick={() => {
-                  if (loginStatus) {
-                    subscribeOnClick(refetch);
-                  } else {
-                    dispatch(openLoginModal());
-                  }
-                }}
-                disabled={subscribeIsLoading}
-              >
-                Subscribe
-              </button>
-            )}
-            {isSubscribed && (
-              <button
-                className="bg-gray-900 hover:bg-gray-800 text-white font-medium text-sm px-2.5 py-1.5 lg:text-base lg:px-3.5 rounded-full"
-                onClick={() => {
-                  if (loginStatus) {
-                    unsubscribeOnClick(refetch);
-                  } else {
-                    dispatch(openLoginModal());
-                  }
-                }}
-                disabled={unsubscribeIsLoading}
-              > 
-                Unsubscribe
-              </button>
-            )}
-          </div>
+
+        <div>
+          {!isSubscribed ? (
+            <button
+              className={buttonClass}
+              onClick={() => {
+                if (loginStatus) {
+                  subscribeOnClick(refetch);
+                } else {
+                  dispatch(openLoginModal());
+                }
+              }}
+              disabled={subscribeIsLoading}
+            >
+              Subscribe
+            </button>
+          ) : (
+            <button
+              className={buttonClass}
+              onClick={() => {
+                if (loginStatus) {
+                  unsubscribeOnClick(refetch);
+                } else {
+                  dispatch(openLoginModal());
+                }
+              }}
+              disabled={unsubscribeIsLoading}
+            >
+              Unsubscribe
+            </button>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -15,7 +15,7 @@
 
   /* Change scrollbar width for Chrome, Safari and Opera */
   .scrollbar-thin::-webkit-scrollbar {
-    width: .4rem;
+    width: 0.4rem;
   }
   .scrollbar-thin::-webkit-scrollbar-track {
     background: unset;
@@ -41,12 +41,21 @@
 
   /* Show scrollbar on hover for IE, Edge and Firefox */
   .scrollbar-on-hover {
-    -ms-overflow-style: none;  /* For IE/Edge to hide scrollbar */
+    -ms-overflow-style: none; /* For IE/Edge to hide scrollbar */
     scrollbar-width: none; /* Firefox */
   }
-  
+
   .scrollbar-on-hover:hover {
-    -ms-overflow-style: auto;  /* For IE/Edge to show scrollbar on hover */
+    -ms-overflow-style: auto; /* For IE/Edge to show scrollbar on hover */
     scrollbar-width: auto; /* Firefox */
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #525252;
+  }
+  .scrollbar-thin {
+    scrollbar-color: #525252 transparent; /* Firefox */
   }
 }

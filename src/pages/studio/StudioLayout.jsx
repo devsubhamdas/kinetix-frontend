@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { FlexContainer } from "../../components";
 import { Navbar } from "../../components";
 import { MdDashboard } from "react-icons/md";
@@ -9,9 +9,11 @@ import { FaMagic } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useGetChannelInfoAndStatsQuery } from "../../api/userApi";
 
+const hoverClass = "hover:bg-gray-200 dark:hover:bg-neutral-700";
+
 function StudioLeftNav() {
-  const location = useLocation();
   const { user } = useSelector((state) => state.auth);
+  const base = `/channel/${user?.username}`;
 
   const { data: channel } = useGetChannelInfoAndStatsQuery(
     {
@@ -23,117 +25,88 @@ function StudioLeftNav() {
     }
   );
 
+  const navItems = [
+    { label: "Dashboard", to: `${base}/studio`, icon: MdDashboard, end: true },
+    {
+      label: "Content",
+      to: `${base}/studio/content`,
+      icon: MdOutlineVideoLibrary,
+      end: true,
+    },
+    { label: "Analytics", to: `${base}/studio/analytics`, icon: IoMdStats },
+    {
+      label: "Community",
+      to: `${base}/studio/community`,
+      icon: RiUserCommunityLine,
+    },
+    {
+      label: "Copyright",
+      to: `${base}/studio/copyright`,
+      icon: MdOutlineCopyright,
+    },
+    {
+      label: "Customization",
+      to: `${base}/studio/customization`,
+      icon: FaMagic,
+    },
+  ];
+
   return (
-    <>
-      <aside className="">
-        <nav className="sticky top-[72px]">
-          <div className="md:w-[200px] lg:w-[236px] border shadow-inner w-max min-h-[calc(100vh-72px)]">
-            <ul className="">
-              <li>
-                <NavLink to={`/channel/${user?.username}`}>
-                  <div className="flex items-center gap-x-4 md:block px-3 md:px-5 py-2 hover:bg-gray-200">
-                    <div className="w-9 md:w-24 lg:w-32 md:mx-auto">
-                      <img
-                        src={
-                          channel?.data?.avatar || "/temp/default-avatar.png"
-                        }
-                        alt=""
-                        className="w-full block aspect-square rounded-full object-cover"
-                      />
-                    </div>
-                    <div className="hidden md:block text-center my-4">
-                      <span className="font-semibold text-sm">{}</span>
-                      <h1 className="text-gray-500 font-medium text-sm">
-                        {user?.username}
-                      </h1>
-                    </div>
-                  </div>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to={`/channel/${user?.username}/studio`}
-                  className={(isActive) =>
-                    isActive &&
-                    location.pathname === `/channel/${user?.username}/studio`
-                      ? "text-blue-600 font-medium"
-                      : "text-black"
-                  }
-                  end
+    <aside>
+      <nav className="sticky top-[72px]">
+        <div
+          className="md:w-[200px] lg:w-[236px] w-max min-h-[calc(100vh-72px)] border shadow-inner
+                     bg-white text-neutral-900 border-neutral-200
+                     dark:bg-neutral-900 dark:text-neutral-100 dark:border-neutral-700 dark:shadow-none"
+        >
+          <ul>
+            <li>
+              <NavLink to={base}>
+                <div
+                  className={`${hoverClass} flex items-center gap-x-4 md:block px-3 md:px-5 py-2`}
                 >
-                  <div className="md:flex items-center gap-x-4 px-3 md:px-5 py-2 hover:bg-gray-200">
-                    <MdDashboard className="text-2xl" />
-                    <span className={`text-[0.625rem] md:text-sm lg:text-base`}>
-                      Dashboard
-                    </span>
+                  <div className="w-9 md:w-24 lg:w-32 md:mx-auto">
+                    <img
+                      src={channel?.data?.avatar || "/temp/default-avatar.png"}
+                      alt=""
+                      className="w-full block aspect-square rounded-full object-cover bg-gray-100 dark:bg-neutral-800"
+                    />
                   </div>
-                </NavLink>
-              </li>
-              <li>
+                  <div className="hidden md:block text-center my-4">
+                    <h1 className="text-gray-500 dark:text-neutral-400 font-medium text-sm">
+                      {user?.username}
+                    </h1>
+                  </div>
+                </div>
+              </NavLink>
+            </li>
+
+            {navItems.map(({ label, to, icon: Icon, end }) => (
+              <li key={label}>
                 <NavLink
-                  to={`/channel/${user?.username}/studio/content`}
-                  className={(isActive) =>
-                    isActive &&
-                    location.pathname ===
-                      `/channel/${user?.username}/studio/content`
-                      ? "text-blue-600 font-medium"
-                      : "text-black"
+                  to={to}
+                  end={end}
+                  className={({ isActive }) =>
+                    isActive
+                      ? "text-blue-600 dark:text-blue-400 font-medium"
+                      : "text-neutral-900 dark:text-neutral-100"
                   }
-                  end
                 >
-                  <div className="md:flex items-center gap-x-4 px-3 md:px-5 py-2 hover:bg-slate-200">
-                    <MdOutlineVideoLibrary className="text-2xl" />
+                  <div
+                    className={`${hoverClass} md:flex items-center gap-x-4 px-3 md:px-5 py-2`}
+                  >
+                    <Icon className="text-2xl" />
                     <span className="text-[0.625rem] md:text-sm lg:text-base">
-                      Content
+                      {label}
                     </span>
                   </div>
                 </NavLink>
               </li>
-              <li>
-                <NavLink to={`/channel/${user?.username}/studio/analytics`}>
-                  <div className="md:flex items-center gap-x-4 px-3 md:px-5 py-2 hover:bg-slate-200">
-                    <IoMdStats className="text-2xl" />
-                    <span className="text-[0.625rem] md:text-sm lg:text-base">
-                      Analytics
-                    </span>
-                  </div>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to={`/channel/${user?.username}/studio/community`}>
-                  <div className="md:flex items-center gap-x-4 px-3 md:px-5 py-2 hover:bg-slate-200">
-                    <RiUserCommunityLine className="text-2xl" />
-                    <span className="text-[0.625rem] md:text-sm lg:text-base">
-                      Community
-                    </span>
-                  </div>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to={`/channel/${user?.username}/studio/copyright`}>
-                  <div className="md:flex items-center gap-x-4 px-3 md:px-5 py-2 hover:bg-slate-200">
-                    <MdOutlineCopyright className="text-2xl" />
-                    <span className="text-[0.625rem] md:text-sm lg:text-base">
-                      Copyright
-                    </span>
-                  </div>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to={`/channel/${user?.username}/studio/customization`}>
-                  <div className="md:flex items-center gap-x-4 px-3 md:px-5 py-2 hover:bg-slate-200">
-                    <FaMagic className="text-2xl" />
-                    <span className="text-[0.625rem] md:text-sm lg:text-base">
-                      Customization
-                    </span>
-                  </div>
-                </NavLink>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </aside>
-    </>
+            ))}
+          </ul>
+        </div>
+      </nav>
+    </aside>
   );
 }
 

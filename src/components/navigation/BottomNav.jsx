@@ -1,4 +1,4 @@
-// Left Navigation for small to medium devices only, screen size < 768px
+// Bottom Navigation for small devices only, screen size < 768px
 import React from "react";
 import { Link } from "react-router-dom";
 import { IoMdHome } from "react-icons/io";
@@ -10,55 +10,47 @@ import { useSelector } from "react-redux";
 
 function BottomNav() {
   const username = useSelector((state) => state.auth.user?.username);
+
+  const navItems = [
+    { label: "Home", to: "/", icon: IoMdHome },
+    { label: "Trending", to: "/", icon: BsFire },
+    {
+      label: "Studio",
+      to: `/channel/${username}/studio`,
+      icon: AiOutlineVideoCameraAdd,
+      requiresAuth: true,
+    },
+    {
+      label: "Subscriptions",
+      to: "/feed/subscriptions",
+      icon: MdOutlineSubscriptions,
+    },
+    { label: "You", to: "/", icon: CiUser },
+  ];
+
+  const visibleItems = navItems.filter(
+    (item) => !item.requiresAuth || username
+  );
+
   return (
-    <>
-      <nav className="md:hidden fixed bottom-0 w-full bg-white py-2">
-        <div className="">
-          <ul className="flex justify-around text-xs text-center">
-            <li>
-              <Link to={"/"}>
-                <div>
-                  <IoMdHome className="text-2xl mx-auto" />
-                  <span className="">Home</span>
-                </div>
-              </Link>
-            </li>
-            <li>
-              <Link to={"/"}>
-                <div>
-                  <BsFire className="text-2xl mx-auto" />
-                  <span>Trending</span>
-                </div>
-              </Link>
-            </li>
-            <li>
-              <Link to={`/channel/${username}/studio`}>
-                <div>
-                  <AiOutlineVideoCameraAdd className="text-2xl mx-auto" />
-                  <span>Studio</span>
-                </div>
-              </Link>
-            </li>
-            <li>
-              <Link to={"/feed/subscriptions"}>
-                <div>
-                  <MdOutlineSubscriptions className="text-2xl mx-auto" />
-                  <span>Subscriptions</span>
-                </div>
-              </Link>
-            </li>
-            <li>
-              <Link to={"/"}>
-                <div>
-                  <CiUser className="text-2xl mx-auto" />
-                  <span>You</span>
-                </div>
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </>
+    <nav
+      className="md:hidden fixed bottom-0 w-full py-2 z-50 border-t
+                 bg-white text-neutral-900 border-neutral-200
+                 dark:bg-neutral-900 dark:text-neutral-100 dark:border-neutral-700"
+    >
+      <ul className="flex justify-around text-xs text-center">
+        {visibleItems.map(({ label, to, icon: Icon }) => (
+          <li key={label}>
+            <Link to={to}>
+              <div>
+                <Icon className="text-2xl mx-auto" />
+                <span>{label}</span>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }
 

@@ -2,8 +2,13 @@ import React from "react";
 
 // base block: every skeleton piece uses this so the colour stays consistent
 const Bone = ({ className = "" }) => (
-  <div className={`bg-gray-200 ${className}`} />
+  <div className={`bg-gray-200 dark:bg-neutral-800 ${className}`} />
 );
+
+// surface for boxes (description, add-comment) that sit behind their own bones
+const boxClass = "bg-gray-100 dark:bg-neutral-800";
+// bones inside those boxes need to override Bone's default colour
+const boxBone = "!bg-gray-200 dark:!bg-neutral-800";
 
 /* -------------------------------------------------------------------------- */
 /* VIDEO SECTION (player + title + channel row + actions + description)       */
@@ -45,9 +50,9 @@ export function VideoSectionSkeleton() {
         </div>
 
         {/* description box */}
-        <div className="bg-gray-100 rounded-2xl p-4 mt-4 space-y-3">
-          <Bone className="h-4 w-40 rounded !bg-gray-200" />
-          <Bone className="h-4 w-24 rounded !bg-gray-200" />
+        <div className={`${boxClass} rounded-2xl p-4 mt-4 space-y-3`}>
+          <Bone className={`h-4 w-40 rounded ${boxBone}`} />
+          <Bone className={`h-4 w-24 rounded ${boxBone}`} />
         </div>
       </div>
     </div>
@@ -85,9 +90,13 @@ export function CommentSectionSkeleton({ rows = 4 }) {
       aria-label="Loading comments"
     >
       {/* add comment box */}
-      <div className="bg-gray-100 rounded-2xl p-4 flex items-center gap-3 md:gap-4">
-        <Bone className="size-10 md:size-12 rounded-full shrink-0 !bg-gray-200" />
-        <Bone className="h-10 md:h-11 flex-1 rounded-full !bg-gray-200" />
+      <div
+        className={`${boxClass} rounded-2xl p-4 flex items-center gap-3 md:gap-4`}
+      >
+        <Bone
+          className={`size-10 md:size-12 rounded-full shrink-0 ${boxBone}`}
+        />
+        <Bone className={`h-10 md:h-11 flex-1 rounded-full ${boxBone}`} />
       </div>
 
       {/* "0 Comments" + Top / Newest chips + sort chevron */}
@@ -152,7 +161,7 @@ export function RecommendVideoSectionSkeleton({ count = 8 }) {
 /* -------------------------------------------------------------------------- */
 export function WatchPageSkeleton() {
   return (
-    <div className="max-w-[1800px] lg:mx-auto mb-5 md:mb-9 lg:mb-16">
+    <div className="max-w-[1800px] lg:mx-auto mb-5 md:mb-9 lg:mb-16 dark:bg-neutral-900">
       <div className="flex flex-col md:flex-row md:gap-x-5 lg:gap-x-10">
         <div className="flex-1 min-w-0">
           <VideoSectionSkeleton />

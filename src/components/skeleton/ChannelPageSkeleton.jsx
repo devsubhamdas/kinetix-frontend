@@ -1,7 +1,7 @@
 import React from "react";
 
 const Bone = ({ className = "" }) => (
-  <div className={`bg-gray-200 ${className}`} />
+  <div className={`bg-gray-200 dark:bg-neutral-700 ${className}`} />
 );
 
 function ChannelPageSkeleton() {
@@ -37,7 +37,7 @@ function ChannelPageSkeleton() {
 
       {/* tabs: Home Videos Live Community Playlists About */}
       <div className="mt-6 md:mt-8 px-3 md:px-2">
-        <div className="flex items-center gap-6 md:gap-8 pb-3 overflow-hidden border-b border-gray-200">
+        <div className="flex items-center gap-6 md:gap-8 pb-3 overflow-hidden border-b border-neutral-200 dark:border-neutral-700">
           <Bone className="h-5 w-12 rounded shrink-0" />
           <Bone className="h-5 w-14 rounded shrink-0" />
           <Bone className="h-5 w-10 rounded shrink-0" />

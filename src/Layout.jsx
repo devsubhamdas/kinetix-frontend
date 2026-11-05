@@ -13,7 +13,9 @@ import useAuth from "./hooks/useAuth";
 
 function Layout() {
   const dispatch = useDispatch();
-  const isLoginModalOpen = useSelector((state) => state.global.isLoginModalOpen);
+  const isLoginModalOpen = useSelector(
+    (state) => state.global.isLoginModalOpen
+  );
   const currentAuthState = useSelector((state) => state.auth);
 
   // try to authenticate on first render
@@ -24,7 +26,9 @@ function Layout() {
   if (!isAuthenticated)
     return (
       <>
-        <div>Authentication in progress, please wait...</div>
+        <div className="dark:text-white">
+          Authentication in progress, please wait...
+        </div>
       </>
     );
 

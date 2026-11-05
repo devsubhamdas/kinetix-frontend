@@ -8,7 +8,7 @@ const HomePageSkeleton = () => {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="h-44 animate-pulse bg-gray-100 rounded-xl"
+          className="h-44 animate-pulse bg-gray-100 dark:bg-neutral-800 rounded-xl"
         ></div>
       ))}
     </>

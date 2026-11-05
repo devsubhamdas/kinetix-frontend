@@ -25,7 +25,7 @@ function ChannelVideosPage() {
           {Array.from({ length: 12 }).map((_, i) => (
             <div
               key={i}
-              className="h-24 animate-pulse bg-gray-100 rounded-xl"
+              className="h-36 animate-pulse bg-gray-100 dark:bg-neutral-800 rounded-xl"
             ></div>
           ))}
         </GridContainer>

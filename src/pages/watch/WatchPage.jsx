@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -87,11 +87,36 @@ function WatchPage() {
   } = useGetAllCommentsByRefIdQuery(id);
 
   // fetch recommended videos
+  const [cursor, setCursor] = useState();
   const {
-    data: videos,
+    data,
     error: recommendedVideosError,
     isLoading: recommendedVideosIsLoading,
-  } = useGetVideosByRecommendationQuery();
+    isFetching: recommendedVideosIsFetching,
+  } = useGetVideosByRecommendationQuery({ cursor, limit: 10 });
+
+  const nextCursor = data?.data?.nextCursor;
+  const sentinelRef = useRef(null);
+
+  const loadMore = useCallback(() => {
+    if (nextCursor && !recommendedVideosIsFetching) setCursor(nextCursor);
+  }, [nextCursor, recommendedVideosIsFetching]);
+
+  // Infinite scroll
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || !nextCursor) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) loadMore();
+      },
+      { rootMargin: "300px" } // start loading before the user hits the bottom
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [loadMore, nextCursor]);
 
   // scroll to top on if videoFile changes
   useEffect(() => {
@@ -200,9 +225,9 @@ function WatchPage() {
               {/* {recommendedVideosError && (
                 <div>ERROR:: {recommendedVideosError.error}</div>
               )} */}
-              {videos && (
+              {data?.data.videos && (
                 <VideoList
-                  videos={videos.data}
+                  videos={data?.data.videos}
                   cardType="flex"
                   hideProfile={true}
                   spaceX="space-x-3"
@@ -211,6 +236,15 @@ function WatchPage() {
                   lineHeight="leading-4 lg:leading-5"
                   fontWeight="font-medium"
                 />
+              )}
+              {nextCursor && (
+                <div ref={sentinelRef}>
+                  {recommendedVideosIsFetching ? (
+                    <RecommendVideoSectionSkeleton />
+                  ) : (
+                    ""
+                  )}
+                </div>
               )}
             </RecommendVideoSection>
           </FlexContainer>

@@ -5,10 +5,11 @@ function VideoList({ videos, ...props }) {
   if (videos?.length === 0) {
     return (
       <>
-        <div className="w-max">This channel does not have any videos</div>
+        <div className="w-max">No videos found</div>
       </>
     );
   }
+
   return (
     <>
       {videos?.map((video) => (

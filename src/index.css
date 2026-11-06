@@ -58,4 +58,8 @@
   .scrollbar-thin {
     scrollbar-color: #525252 transparent; /* Firefox */
   }
+
+  body {
+    background: #171717;
+  }
 }

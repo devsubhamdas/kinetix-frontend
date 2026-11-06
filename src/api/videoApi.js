@@ -10,7 +10,20 @@ const videoApi = createApi({
   }),
   endpoints: (builder) => ({
     getVideosByRecommendation: builder.query({
-      query: () => "/recommend/videos",
+      query: ({ cursor, limit = 20 } = {}) =>
+        `/recommend/videos?limit=${limit}&cursor=${cursor ?? ""}`,
+      // One cache entry no matter what the cursor is
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      // Append new pages (or replace when starting from the beginning)
+      merge: (currentCache, newData, { arg }) => {
+        if (!arg?.cursor) return newData;
+        currentCache.data.videos.push(...newData.data.videos);
+        currentCache.data.nextCursor = newData.data.nextCursor;
+        currentCache.data.hasNextPage = newData.data.hasNextPage;
+      },
+      // Refetch whenever the cursor changes
+      forceRefetch: ({ currentArg, previousArg }) =>
+        currentArg?.cursor !== previousArg?.cursor,
     }),
     getVideoById: builder.query({
       query: ({ channelName, id, accessToken }) => ({
@@ -20,8 +33,21 @@ const videoApi = createApi({
         },
       }),
     }),
-    getAllVideosByChannelName: builder.query({
-      query: (channelName) => `/channel/${channelName}/videos`,
+    getVideosByChannelName: builder.query({
+      query: ({ channelName, cursor, limit = 20 } = {}) =>
+        `/channel/${channelName}/videos?limit=${limit}&cursor=${cursor ?? ""}`,
+      // One cache entry no matter what the cursor is
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      // Append new pages (or replace when starting from the beginning)
+      merge: (currentCache, newData, { arg }) => {
+        if (!arg?.cursor) return newData;
+        currentCache.data.videos.push(...newData.data.videos);
+        currentCache.data.nextCursor = newData.data.nextCursor;
+        currentCache.data.hasNextPage = newData.data.hasNextPage;
+      },
+      // Refetch whenever the cursor changes
+      forceRefetch: ({ currentArg, previousArg }) =>
+        currentArg?.cursor !== previousArg?.cursor,
     }),
     uploadVideo: builder.mutation({
       queryFn: async ({ username, data, accessToken }, api) => {
@@ -65,7 +91,7 @@ const videoApi = createApi({
 export const {
   useGetVideosByRecommendationQuery,
   useGetVideoByIdQuery,
-  useGetAllVideosByChannelNameQuery,
+  useGetVideosByChannelNameQuery,
   useUploadVideoMutation,
 } = videoApi;
 

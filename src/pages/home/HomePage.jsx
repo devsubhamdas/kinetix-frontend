@@ -1,19 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { VideoList, GridContainer, HomePageSkeleton } from "../../components";
 import { useGetVideosByRecommendationQuery } from "../../api/videoApi.js";
 
 function HomePage() {
-  const {
-    data: videos,
-    error,
-    isLoading,
-  } = useGetVideosByRecommendationQuery();
+  const [cursor, setCursor] = useState();
+  const { data, error, isLoading, isFetching } =
+    useGetVideosByRecommendationQuery({ cursor });
+
+  const nextCursor = data?.data?.nextCursor;
+  const sentinelRef = useRef(null);
+
+  const loadMore = useCallback(() => {
+    if (nextCursor && !isFetching) setCursor(nextCursor);
+  }, [nextCursor, isFetching]);
+
+  // Infinite scroll
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || !nextCursor) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) loadMore();
+      },
+      { rootMargin: "300px" } // start loading before the user hits the bottom
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [loadMore, nextCursor]);
 
   useEffect(() => {
-    if (error) {
-      console.error("ERROR:: ", error);
-    }
-  }, []);
+    if (error) console.error("ERROR:: ", error);
+  }, [error]);
 
   useEffect(() => {
     if (!isLoading) return;
@@ -27,23 +46,36 @@ function HomePage() {
   }, [isLoading]);
 
   return (
-    <>
-      <main className="w-full mb-20">
-        {isLoading && (
-          <div className="h-dvh overflow-hidden">
-            <GridContainer>
-              <HomePageSkeleton />
-            </GridContainer>
-          </div>
-        )}
-        {/* {error && <div>ERROR:: {error.error}</div>} */}
-        {videos && (
+    <main className="w-full mb-20">
+      {isLoading && (
+        <div className="h-dvh overflow-hidden">
           <GridContainer>
-            <VideoList videos={videos.data} />
+            <HomePageSkeleton />
           </GridContainer>
-        )}
-      </main>
-    </>
+        </div>
+      )}
+
+      {data?.data?.videos && (
+        <GridContainer>
+          <VideoList videos={data.data.videos} />
+        </GridContainer>
+      )}
+
+      {/* Sentinel: only rendered while there is another page */}
+      {nextCursor && (
+        <div ref={sentinelRef}>
+          {isFetching ? (
+            <div className="h-dvh overflow-hidden">
+              <GridContainer>
+                <HomePageSkeleton />
+              </GridContainer>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+      )}
+    </main>
   );
 }
 

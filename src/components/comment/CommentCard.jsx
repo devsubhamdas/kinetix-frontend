@@ -17,7 +17,7 @@ function CommentCard({ content, avatar, username, createdAt, updatedAt }) {
     <div className="flex gap-1 lg:gap-2 text-neutral-900 dark:text-neutral-100">
       <div className="p-0.5">
         <img
-          src={avatar || "/temp/default-avatar.png"}
+          src={avatar || "/assets/default-avatar.png"}
           alt=""
           className="w-8 aspect-square object-cover rounded-full bg-gray-100 dark:bg-neutral-800"
         />

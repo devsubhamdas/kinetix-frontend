@@ -30,7 +30,7 @@ function ChannelInfoAndStats({
       <div>
         <NavLink to={`/channel/${channel}`}>
           <img
-            src={profile || "/temp/default-avatar.png"}
+            src={profile || "/assets/default-avatar.png"}
             alt=""
             className="w-11 aspect-square object-cover object-center rounded-full bg-gray-100 dark:bg-neutral-800"
           />

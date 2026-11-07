@@ -65,11 +65,11 @@ function VideoCard({
           ) : (
             <picture>
               <source
-                srcSet="/temp/default-thumbnail-dark.jpg"
+                srcSet="/assets/default-thumbnail-dark.jpg"
                 media="(prefers-color-scheme: dark)"
               />
               <img
-                src="/temp/default-thumbnail.png"
+                src="/assets/default-thumbnail.png"
                 alt=""
                 className="w-full h-full object-cover rounded-xl"
               />
@@ -88,7 +88,7 @@ function VideoCard({
             onClick={navigateToChannelPage}
           >
             <img
-              src={profile || "/temp/default-avatar.png"}
+              src={profile || "/assets/default-avatar.png"}
               alt=""
               className="w-full aspect-square rounded-full bg-gray-100 dark:bg-neutral-800"
             />

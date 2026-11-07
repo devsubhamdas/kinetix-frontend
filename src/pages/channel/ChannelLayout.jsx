@@ -46,10 +46,10 @@ function ChannelLayout() {
     <>
       <main className="w-full">
         <Banner
-          coverImage={channel?.data.coverImage || "/temp/default-banner.png"}
+          coverImage={channel?.data.coverImage || "/assets/default-banner.png"}
         />
         <InfoAndStats
-          profile={channel?.data.avatar || "/temp/default-avatar.png"}
+          profile={channel?.data.avatar || "/assets/default-avatar.png"}
           channelName={channel?.data.username || null}
           subscribersCount={channel?.data.subscribersCount}
           videosCount={channel?.data.videosCount}

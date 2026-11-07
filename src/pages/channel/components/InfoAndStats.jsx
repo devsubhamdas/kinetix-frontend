@@ -27,7 +27,7 @@ function InfoAndStats({
     <div className="flex gap-5 mt-3 lg:mt-5 mx-2.5 lg:mx-0 text-neutral-900 dark:text-neutral-100">
       <div>
         <img
-          src={profile || "/temp/default-avatar.png"}
+          src={profile || "/assets/default-avatar.png"}
           alt=""
           className="w-20 md:w-28 lg:w-36 aspect-square object-cover object-center rounded-full bg-gray-100 dark:bg-neutral-800"
         />

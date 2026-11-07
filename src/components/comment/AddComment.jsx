@@ -42,7 +42,7 @@ function AddComment({
     <div className="flex items-center gap-x-2 p-3 rounded-xl bg-gray-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100">
       <div className="p-0.5">
         <img
-          src={loginStatus ? user?.avatar : "/temp/default-avatar.png"}
+          src={loginStatus ? user?.avatar : "/assets/default-avatar.png"}
           alt=""
           className="w-8 aspect-square object-cover rounded-full bg-gray-200 dark:bg-neutral-700"
         />

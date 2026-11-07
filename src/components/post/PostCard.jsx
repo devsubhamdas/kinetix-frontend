@@ -24,7 +24,7 @@ function PostCard() {
         <div className="w-9 md:w-11 aspect-square">
           <NavLink to="/channel/YourChannelName">
             <img
-              src="/temp/test-profile.png"
+              src="/assets/test-profile.png"
               alt=""
               className="w-full aspect-square object-cover rounded-full bg-gray-100 dark:bg-neutral-800"
             />
@@ -58,7 +58,7 @@ function PostCard() {
       <div className="px-3 md:px-9 lg:px-14 mt-5">
         <NavLink to="/post/YourChannelName/p_id/123">
           <img
-            src="/temp/test-post.png"
+            src="/assets/test-post.png"
             alt=""
             className="w-full rounded-2xl aspect-square object-cover bg-gray-100 dark:bg-neutral-800"
           />

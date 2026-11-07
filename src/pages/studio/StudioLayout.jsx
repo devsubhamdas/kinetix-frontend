@@ -67,7 +67,9 @@ function StudioLeftNav() {
                 >
                   <div className="w-9 md:w-24 lg:w-32 md:mx-auto">
                     <img
-                      src={channel?.data?.avatar || "/temp/default-avatar.png"}
+                      src={
+                        channel?.data?.avatar || "/assets/default-avatar.png"
+                      }
                       alt=""
                       className="w-full block aspect-square rounded-full object-cover bg-gray-100 dark:bg-neutral-800"
                     />

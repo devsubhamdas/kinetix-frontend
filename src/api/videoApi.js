@@ -45,9 +45,10 @@ const videoApi = createApi({
         currentCache.data.nextCursor = newData.data.nextCursor;
         currentCache.data.hasNextPage = newData.data.hasNextPage;
       },
-      // Refetch whenever the cursor changes
+      // Refetch whenever the cursor changes or channel name changes
       forceRefetch: ({ currentArg, previousArg }) =>
-        currentArg?.cursor !== previousArg?.cursor,
+        currentArg?.cursor !== previousArg?.cursor ||
+        currentArg?.channelName !== previousArg?.channelName,
     }),
     uploadVideo: builder.mutation({
       queryFn: async ({ username, data, accessToken }, api) => {

@@ -10,6 +10,7 @@ function ChannelVideosPage() {
     {
       channelName,
       cursor,
+      limit: 10,
     }
   );
 
@@ -45,16 +46,17 @@ function ChannelVideosPage() {
   return (
     <div className="mt-3 mb-20">
       {/* skeleton loading  */}
-      {isLoading && (
-        <GridContainer colWidth="14rem">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-36 animate-pulse bg-gray-100 dark:bg-neutral-800 rounded-xl"
-            ></div>
-          ))}
-        </GridContainer>
-      )}
+      {isLoading ||
+        (isFetching && (
+          <GridContainer colWidth="14rem">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-36 animate-pulse bg-gray-100 dark:bg-neutral-800 rounded-xl"
+              ></div>
+            ))}
+          </GridContainer>
+        ))}
       {/* {error && <div>ERROR:: {error.error}</div>} */}
       {data?.data.videos && (
         <GridContainer colWidth="14rem">

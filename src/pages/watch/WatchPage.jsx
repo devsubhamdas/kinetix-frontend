@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -13,7 +13,7 @@ import {
 } from "../../components";
 
 // local components
-import { VideoPlayer, ImageKitVideoPlayer } from "./components/VideoPlayer.jsx";
+import { VideoPlayer } from "./components/VideoPlayer.jsx";
 import VideoInfoAndStats from "./components/VideoInfoAndStats.jsx";
 import ChannelInfoAndStats from "./components/ChannelInfoAndStats.jsx";
 import SocialActions from "./components/SocialActions.jsx";
@@ -43,15 +43,23 @@ import {
 } from "../../features/global/globalSlice.js";
 import useAuth from "../../hooks/useAuth.js";
 
-// main component
 function WatchPage() {
   const dispatch = useDispatch();
   const { username: channelName, id } = useParams();
 
-  // for login modal
   const isLoginModalOpen = useSelector(
     (state) => state.global.isLoginModalOpen
   );
+  const isAuthenticated = useSelector((state) => state.global.isAuthenticated);
+  const loginStatus = useSelector((state) => state.auth.loginStatus);
+
+  const { initializeAuth } = useAuth();
+  initializeAuth();
+
+  // get user
+  const { data: user } = useGetUserQuery(localStorage.getItem("accessToken"), {
+    skip: !loginStatus,
+  });
 
   // fetch video by id
   const {
@@ -72,12 +80,6 @@ function WatchPage() {
       accessToken: localStorage.getItem("accessToken"),
     });
 
-  // get user
-  const loginStatus = useSelector((state) => state.auth.loginStatus);
-  const { data: user } = useGetUserQuery(localStorage.getItem("accessToken"), {
-    skip: !loginStatus,
-  });
-
   // fetch comments
   const {
     data: comments,
@@ -86,8 +88,11 @@ function WatchPage() {
     refetch: refetchComments,
   } = useGetAllCommentsByRefIdQuery(id);
 
-  // fetch recommended videos
+  // recommended videos infinite scroll
   const [cursor, setCursor] = useState();
+  // The sentinel element lives in STATE, so the effect below re-runs
+  // whenever the element mounts/unmounts.
+  const [sentinel, setSentinel] = useState(null);
   const {
     data,
     error: recommendedVideosError,
@@ -96,62 +101,50 @@ function WatchPage() {
   } = useGetVideosByRecommendationQuery({ cursor, limit: 10 });
 
   const nextCursor = data?.data?.nextCursor;
-  const sentinelRef = useRef(null);
+  const hasMore = data?.data?.hasNextPage ?? !!nextCursor;
 
   const loadMore = useCallback(() => {
-    if (nextCursor && !recommendedVideosIsFetching) setCursor(nextCursor);
-  }, [nextCursor, recommendedVideosIsFetching]);
+    if (hasMore && nextCursor && !recommendedVideosIsFetching) {
+      setCursor(nextCursor);
+    }
+  }, [hasMore, nextCursor, recommendedVideosIsFetching]);
 
-  // Infinite scroll
   useEffect(() => {
-    const el = sentinelRef.current;
-    if (!el || !nextCursor) return;
+    if (!sentinel || !hasMore) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) loadMore();
       },
-      { rootMargin: "300px" } // start loading before the user hits the bottom
+      { rootMargin: "300px" }
     );
 
-    observer.observe(el);
+    observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [loadMore, nextCursor]);
+  }, [sentinel, hasMore, loadMore]);
 
-  // scroll to top on if videoFile changes
+  // start from the first page when the watched video changes
+  useEffect(() => {
+    setCursor(null);
+  }, [id]);
+
+  // scroll to top if videoFile changes
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, [video?.data.videoFile]);
 
-  // when user login status changed refetch video to show updated video info and channle info
+  // when login status changes, refetch to show updated video/channel info
   useEffect(() => {
     refetchVideo();
     refetchChannelInfoAndStats();
   }, [loginStatus]);
 
   useEffect(() => {
-    if (videoError) {
-      console.error("VideoError::", videoError);
-    }
-    if (recommendedVideosError) {
+    if (videoError) console.error("VideoError::", videoError);
+    if (recommendedVideosError)
       console.error("RecommendedVideosError::", recommendedVideosError);
-    }
-    if (commentsError) {
-      console.error("CommentsError::", commentsError);
-    }
+    if (commentsError) console.error("CommentsError::", commentsError);
   }, [videoError, recommendedVideosError, commentsError]);
-
-  // try to authenticate on first render
-  const isAuthenticated = useSelector((state) => state.global.isAuthenticated);
-  const { initializeAuth } = useAuth();
-  initializeAuth();
-
-  // if (!isAuthenticated)
-  //   return (
-  //     <>
-  //       <div>Authentication in progress, please wait...</div>
-  //     </>
-  //   );
 
   if (!isAuthenticated) return <WatchPageSkeleton />;
 
@@ -168,7 +161,7 @@ function WatchPage() {
             <VideoSectionSkeleton />
           </div>
         )}
-        {/* {videoError && <div>ERROR::{videoError.error}</div>} */}
+
         {!videoIsLoading && video && (
           <FlexContainer
             className={"flex-col md:flex-row"}
@@ -212,19 +205,17 @@ function WatchPage() {
                     <CommentSectionSkeleton />
                   </div>
                 )}
-                {/* {commentsError && <div>ERROR:: {commentsError.error}</div>} */}
                 {comments && <CommentList comments={comments.data} />}
               </CommentSection>
             </VideoSection>
+
             <RecommendVideoSection>
               {recommendedVideosIsLoading && (
                 <div>
                   <RecommendVideoSectionSkeleton />
                 </div>
               )}
-              {/* {recommendedVideosError && (
-                <div>ERROR:: {recommendedVideosError.error}</div>
-              )} */}
+
               {data?.data.videos && (
                 <VideoList
                   videos={data?.data.videos}
@@ -237,12 +228,12 @@ function WatchPage() {
                   fontWeight="font-medium"
                 />
               )}
-              {nextCursor && (
-                <div ref={sentinelRef}>
-                  {recommendedVideosIsFetching ? (
+
+              {/* React calls setSentinel(node) on mount, setSentinel(null) on unmount */}
+              {hasMore && (
+                <div ref={setSentinel} style={{ minHeight: 1 }}>
+                  {recommendedVideosIsFetching && (
                     <RecommendVideoSectionSkeleton />
-                  ) : (
-                    ""
                   )}
                 </div>
               )}

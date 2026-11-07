@@ -9,7 +9,6 @@ function ChannelVideosPage() {
   const { data, error, isLoading, isFetching } = useGetVideosByChannelNameQuery(
     {
       channelName,
-      limit: 5,
       cursor,
     }
   );

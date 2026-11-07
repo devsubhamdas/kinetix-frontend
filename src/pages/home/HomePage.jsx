@@ -64,14 +64,12 @@ function HomePage() {
       {/* Sentinel: only rendered while there is another page */}
       {nextCursor && (
         <div ref={sentinelRef}>
-          {isFetching ? (
+          {isFetching && (
             <div className="h-dvh overflow-hidden">
               <GridContainer>
                 <HomePageSkeleton />
               </GridContainer>
             </div>
-          ) : (
-            ""
           )}
         </div>
       )}

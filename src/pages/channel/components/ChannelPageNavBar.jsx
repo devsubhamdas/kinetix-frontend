@@ -33,7 +33,7 @@ function ChannelPageNavBar() {
   ];
 
   return (
-    <div className="sticky top-[72px] mt-5 mx-2.5 lg:mx-0 border-b bg-white border-neutral-200 dark:bg-neutral-900 dark:border-neutral-700">
+    <div className="z-50 sticky top-[72px] mt-5 mx-2.5 lg:mx-0 border-b bg-white border-neutral-200 dark:bg-neutral-900 dark:border-neutral-700">
       <ul className="flex gap-5 lg:gap-x-7 font-semibold overflow-x-auto no-scrollbar text-gray-500 dark:text-neutral-400">
         {links.map((link) => (
           <li key={link.name}>

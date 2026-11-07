@@ -12,17 +12,21 @@ function Navbar({ openModal }) {
 
   return (
     <header className="sticky top-0 z-50">
-      <nav className="bg-white text-neutral-900 dark:bg-neutral-900 dark:text-neutral-100">
+      <nav className="bg-white text-neutral-900 dark:bg-neutral-900 dark:text-neutral-100 px-4 sm:px-5 md:px-6 lg:px-8 py-2.5 sm:py-3 md:py-3.5 lg:py-4">
         <div className="flex items-center justify-between">
           <div>
             <Link to="/">
               {/* Swaps the logo automatically based on the browser theme */}
               <picture>
                 <source
-                  srcSet="/img/logo-dark.png"
+                  srcSet="/assets/kinetix-brand-v2/kinetix-logo-dark.png"
                   media="(prefers-color-scheme: dark)"
                 />
-                <img src="/img/logo-light.png" alt="logo" className="w-32" />
+                <img
+                  src="/assets/kinetix-brand-v2/kinetix-logo-light.png"
+                  alt="logo"
+                  className="w-24 sm:w-28 md:w-32 lg:w-36"
+                />
               </picture>
             </Link>
           </div>
@@ -55,7 +59,7 @@ function Navbar({ openModal }) {
             </div>
           </div>
 
-          <div className="flex gap-x-2.5 md:gap-x-4 lg:gap-x-6 mr-4 sm:mr-5 md:mr-6 lg:mr-8">
+          <div className="flex gap-x-2.5 md:gap-x-4 lg:gap-x-6">
             <button className="md:hidden">
               <CiSearch className="cursor-pointer text-2xl" />
             </button>

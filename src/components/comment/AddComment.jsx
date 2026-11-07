@@ -49,7 +49,15 @@ function AddComment({
       </div>
 
       <div className="flex-1">
-        <form onSubmit={handleSubmit(addCommentOnSubmit)}>
+        <form
+          onSubmit={handleSubmit((formData) =>
+            addCommentOnSubmit({
+              ...formData,
+              refType,
+              refId,
+            })
+          )}
+        >
           <div className="flex gap-x-1.5">
             <textarea
               rows="1"

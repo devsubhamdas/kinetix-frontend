@@ -6,14 +6,19 @@ function useComment() {
 
   const addCommentOnSubmit = async (data) => {
     try {
-      const response = await addComment({ ...data, accessToken: localStorage.getItem("accessToken") });
-      // console.log(response);
+      const response = await addComment({
+        ...data,
+        accessToken: localStorage.getItem("accessToken"),
+      });
     } catch (error) {
       console.log("COMMENT ADD ERROR:: ", error);
     }
   };
 
-  return { addCommentOnSubmit, addCommentState: {isError, isLoading, isSuccess} };
+  return {
+    addCommentOnSubmit,
+    addCommentState: { isError, isLoading, isSuccess },
+  };
 }
 
 export default useComment;

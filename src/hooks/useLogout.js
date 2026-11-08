@@ -20,7 +20,7 @@ function useLogout() {
       ).unwrap();
 
       if (!logoutResponse.error) {
-        console.log(logoutResponse);
+        // console.log(logoutResponse);
         dispatch(unauthUser());
       }
     } catch (error) {

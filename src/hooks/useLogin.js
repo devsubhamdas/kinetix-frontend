@@ -11,11 +11,14 @@ function useLogin() {
     try {
       const response = await loginUser(data).unwrap();
       if (!response.error) {
-        console.log("User login successfull: ", response);
+        // console.log("User login successfull: ", response);
         dispatch(
           authUser({
             loginStatus: true,
-            user: { id: response.data.user._id, username: response.data.user.username },
+            user: {
+              id: response.data.user._id,
+              username: response.data.user.username,
+            },
             accessToken: response.data.accessToken,
             refreshToken: response.data.refreshToken,
           })

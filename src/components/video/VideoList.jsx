@@ -16,6 +16,7 @@ function VideoList({ videos, ...props }) {
         <VideoCard
           key={video?._id}
           id={video?._id}
+          encId={video?.encId}
           thumbnail={video?.thumbnail || ""}
           profile={video?.owner?.avatar || ""}
           title={video.title}

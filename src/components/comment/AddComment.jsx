@@ -75,17 +75,6 @@ function AddComment({
                 }
               }}
             />
-            <input
-              type="hidden"
-              value={refType}
-              {...register("refType", { required: true })}
-            />
-            <input
-              type="hidden"
-              value={refId}
-              {...register("refId", { required: true })}
-            />
-
             {/* submit for larger screen */}
             <input
               type="submit"

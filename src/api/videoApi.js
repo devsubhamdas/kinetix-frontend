@@ -26,8 +26,8 @@ const videoApi = createApi({
         currentArg?.cursor !== previousArg?.cursor,
     }),
     getVideoById: builder.query({
-      query: ({ channelName, id, accessToken }) => ({
-        url: `/watch/${channelName}/v_id/${id}`,
+      query: ({ id, accessToken }) => ({
+        url: `/videos/${id}`,
         headers: {
           Authorization: `Bearer ${accessToken || ""}`,
         },

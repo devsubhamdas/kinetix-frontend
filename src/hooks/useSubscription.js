@@ -4,9 +4,7 @@ import {
   useUnsubscribeChannelMutation,
 } from "../api/subscriptionApi";
 
-function useSubscription() {
-  const { username: channelName } = useParams();
-
+function useSubscription({ channelName = undefined }) {
   const [
     subscribeChannel,
     {
@@ -24,7 +22,7 @@ function useSubscription() {
       // console.log(response);
       refetch();
     } catch (error) {
-      console.log("SUBSCRIBE CHANNEL ERROR:: ",error);
+      console.log("SUBSCRIBE CHANNEL ERROR:: ", error);
     }
   };
 
@@ -45,7 +43,7 @@ function useSubscription() {
       // console.log(response);
       refetch();
     } catch (error) {
-      console.log("UNSUBSCRIBE CHANNEL ERROR:: ",error);
+      console.log("UNSUBSCRIBE CHANNEL ERROR:: ", error);
     }
   };
 

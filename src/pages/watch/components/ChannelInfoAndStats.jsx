@@ -23,7 +23,7 @@ function ChannelInfoAndStats({
     unsubscribeOnClick,
     subscribeState: { isLoading: subscribeIsLoading },
     unsubscribeState: { isLoading: unsubscribeIsLoading },
-  } = useSubscription();
+  } = useSubscription({ channelName: channel });
 
   return (
     <div className="flex items-center gap-x-5 mt-3 text-neutral-900 dark:text-neutral-100">

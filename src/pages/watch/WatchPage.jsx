@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -45,7 +45,7 @@ import useAuth from "../../hooks/useAuth.js";
 
 function WatchPage() {
   const dispatch = useDispatch();
-  const { username: channelName, id } = useParams();
+  const { id } = useParams();
 
   const isLoginModalOpen = useSelector(
     (state) => state.global.isLoginModalOpen
@@ -57,7 +57,8 @@ function WatchPage() {
   initializeAuth();
 
   // get user
-  const { data: user } = useGetUserQuery(localStorage.getItem("accessToken"), {
+  const accessToken = useSelector((state) => state.auth.accessToken);
+  const { data: user } = useGetUserQuery(accessToken, {
     skip: !loginStatus,
   });
 
@@ -68,17 +69,23 @@ function WatchPage() {
     isLoading: videoIsLoading,
     refetch: refetchVideo,
   } = useGetVideoByIdQuery({
-    channelName,
     id,
-    accessToken: localStorage.getItem("accessToken"),
+    accessToken,
   });
+
+  const channelName = video?.data?.owner?.username;
 
   // fetch channel info
   const { data: channel, refetch: refetchChannelInfoAndStats } =
-    useGetChannelInfoAndStatsQuery({
-      channelName,
-      accessToken: localStorage.getItem("accessToken"),
-    });
+    useGetChannelInfoAndStatsQuery(
+      {
+        channelName,
+        accessToken,
+      },
+      {
+        skip: !channelName,
+      }
+    );
 
   // fetch comments
   const {
@@ -134,9 +141,15 @@ function WatchPage() {
   }, [video?.data.videoFile]);
 
   // when login status changes, refetch to show updated video/channel info
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     refetchVideo();
-    refetchChannelInfoAndStats();
+    if (channelName) refetchChannelInfoAndStats();
   }, [loginStatus]);
 
   useEffect(() => {

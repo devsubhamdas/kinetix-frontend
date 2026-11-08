@@ -21,7 +21,9 @@ function InfoAndStats({
 }) {
   const dispatch = useDispatch();
   const loginStatus = useSelector((state) => state.auth.loginStatus);
-  const { subscribeOnClick, unsubscribeOnClick } = useSubscription();
+  const { subscribeOnClick, unsubscribeOnClick } = useSubscription({
+    channelName,
+  });
 
   return (
     <div className="flex gap-5 mt-3 lg:mt-5 mx-2.5 lg:mx-0 text-neutral-900 dark:text-neutral-100">

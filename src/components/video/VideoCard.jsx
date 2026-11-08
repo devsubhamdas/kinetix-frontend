@@ -52,7 +52,7 @@ function VideoCard({
   return (
     <div>
       <NavLink
-        to={`/watch/${channelname}/v_id/${id}`}
+        to={`/watch/v/${id}`}
         className={`${cardType} ${spaceY} ${spaceX} text-neutral-900 dark:text-neutral-100`}
       >
         <div className={`relative ${cardHeight} ${cardWidth} flex-1`}>

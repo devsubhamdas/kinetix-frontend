@@ -2,12 +2,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import axios from "axios";
 import { setUploadProgress } from "../features/global/globalSlice";
 import { BASE_URL } from "../constants";
+import baseQueryWithCsrf, { getCsrfToken } from "./baseQuery";
 
 const videoApi = createApi({
   reducerPath: "videoApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: BASE_URL,
-  }),
+  baseQuery: baseQueryWithCsrf,
   endpoints: (builder) => ({
     getVideosByRecommendation: builder.query({
       query: ({ cursor, limit = 20 } = {}) =>
@@ -52,18 +51,14 @@ const videoApi = createApi({
     }),
     uploadVideo: builder.mutation({
       queryFn: async ({ username, data, accessToken }, api) => {
-        const url =
-          import.meta.env.VITE_NODE_ENV === "prod"
-            ? `${
-                import.meta.env.VITE_NODE_SERVER_HOSTNAME
-              }/api/v1/channel/${username}/video/upload`
-            : `${import.meta.env.VITE_NODE_SERVER_LOCAL_HOSTNAME}:${
-                import.meta.env.VITE_NODE_SERVER_PORT
-              }/api/v1/channel/${username}/video/upload`;
+        const url = `${BASE_URL}/channel/${username}/video/upload`;
+        const csrfToken = await getCsrfToken(api);
 
         const config = {
+          withCredentials: true, // required for csrf cookie
           headers: {
             Authorization: `Bearer ${accessToken}`,
+            "X-CSRF-Token": csrfToken,
           },
           onUploadProgress: (upload) => {
             let uploadProgress = Math.round(

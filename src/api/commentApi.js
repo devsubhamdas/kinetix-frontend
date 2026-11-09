@@ -1,11 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../constants";
+import baseQueryWithCsrf from "./baseQuery";
 
 const commentApi = createApi({
   reducerPath: "commentApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: BASE_URL,
-  }),
+  baseQuery: baseQueryWithCsrf,
   endpoints: (builder) => ({
     addComment: builder.mutation({
       query: ({ refType, refId, content, accessToken }) => ({

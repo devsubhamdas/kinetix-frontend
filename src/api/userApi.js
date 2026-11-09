@@ -1,11 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../constants";
+import baseQueryWithCsrf from "./baseQuery";
 
 const userApi = createApi({
   reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: BASE_URL,
-  }),
+  baseQuery: baseQueryWithCsrf,
   endpoints: (builder) => ({
     createUser: builder.mutation({
       query: (formData) => ({

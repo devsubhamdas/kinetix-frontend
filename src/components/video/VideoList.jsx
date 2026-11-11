@@ -20,6 +20,7 @@ function VideoList({ videos, ...props }) {
           thumbnail={video?.thumbnail || ""}
           profile={video?.owner?.avatar || ""}
           title={video.title}
+          description={video?.description}
           channelname={video?.owner?.username}
           views={video?.views}
           duration={video.duration}

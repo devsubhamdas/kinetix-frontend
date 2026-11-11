@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -136,7 +142,7 @@ function WatchPage() {
   }, [id]);
 
   // scroll to top if videoFile changes
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.scrollTo({ top: 0 });
   }, [video?.data.videoFile]);
 

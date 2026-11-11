@@ -27,12 +27,14 @@ import { Protected } from "./components/index.js";
 
 import store from "./app/store.js";
 import { Provider } from "react-redux";
+import SearchPage from "./pages/search/SearchPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<Layout />}>
         <Route path="" element={<HomePage />} />
+        <Route path="/results" element={<SearchPage />} />
         <Route path="/channel/:username" element={<ChannelLayout />}>
           <Route path="/channel/:username" element={<ChannelHomePage />} />
           <Route

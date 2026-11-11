@@ -1,14 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { CiSearch, CiUser } from "react-icons/ci";
+import { IoClose } from "react-icons/io5";
 import { MdMic } from "react-icons/md";
 import { AiOutlineVideoCameraAdd } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import useLogout from "../../hooks/useLogout";
 import { useSelector } from "react-redux";
 
 function Navbar({ openModal }) {
   const { logoutHandler } = useLogout();
   const loginStatus = useSelector((state) => state.auth.loginStatus);
+  const [searchParams] = useSearchParams();
+  const initialTerm = searchParams.get("q") ?? "";
+
+  const [searchTerm, setSearchTerm] = useState(initialTerm);
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const term = searchTerm.trim();
+    if (!term) return;
+    navigate(`/results?q=${encodeURIComponent(term)}`);
+  };
 
   return (
     <header className="sticky top-0 z-50">
@@ -32,7 +45,7 @@ function Navbar({ openModal }) {
           </div>
 
           <div className="hidden md:flex gap-x-4 items-center flex-1 md:max-w-96 lg:max-w-xl">
-            <form className="w-full" onSubmit={(e) => e.preventDefault()}>
+            <form className="w-full" onSubmit={(e) => handleSearch(e)}>
               <div className="flex items-center">
                 <input
                   type="text"
@@ -43,6 +56,9 @@ function Navbar({ openModal }) {
                              dark:border-neutral-700 dark:focus:border-blue-500"
                   name="search"
                   placeholder="Search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  autoComplete="off"
                 />
                 <button
                   type="submit"
@@ -51,6 +67,9 @@ function Navbar({ openModal }) {
                              dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:border-neutral-700"
                 >
                   <CiSearch className="cursor-pointer text-2xl mx-auto" />
+                </button>
+                <button>
+                  <IoClose className="text-2xl mx-auto text-neutral-400" />
                 </button>
               </div>
             </form>

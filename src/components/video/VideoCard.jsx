@@ -10,10 +10,12 @@ function VideoCard({
   thumbnail = "",
   profile = "",
   title = "",
+  description = "",
   channelname = "",
   views = 0,
   duration = "00:00",
   createdAt = "",
+  hideDescription = true,
   hideProfile = false,
   hideChannelName = false,
   cardType = "block",
@@ -54,7 +56,7 @@ function VideoCard({
     <div>
       <NavLink
         to={`/watch/v/${encId}`}
-        className={`${cardType} ${spaceY} ${spaceX} text-neutral-900 dark:text-neutral-100`}
+        className={`${cardType} ${spaceY} ${spaceX} text-neutral-900 dark:text-neutral-100 p-1 md:p-2 lg:p-3 rounded-xl hover:bg-neutral-200 dark:hover:bg-neutral-800 transition`}
       >
         <div className={`relative ${cardHeight} ${cardWidth} flex-1`}>
           {thumbnail ? (
@@ -108,7 +110,7 @@ function VideoCard({
             >
               <span onClick={navigateToChannelPage}>{channelname} </span>
             </h2>
-            <span className="text-xs md:text-sm leading-3 text-gray-600 dark:text-neutral-400">
+            <div className="text-xs md:text-sm leading-3 text-gray-600 dark:text-neutral-400">
               <BsDot
                 className={hideProfile ? "hidden" : "inline lg:hidden text-xs"}
               />
@@ -117,9 +119,19 @@ function VideoCard({
               <span>
                 {formatDistanceToNow(new Date(createdAt), {
                   addSuffix: true,
-                }).replace("about", "")}
+                })
+                  .replace("about", "")
+                  .replace("almost", "")}
               </span>
-            </span>
+            </div>
+
+            <div>
+              {!hideDescription && description && (
+                <h2 className="text-xs md:text-sm text-gray-600 dark:text-neutral-400">
+                  {description}
+                </h2>
+              )}
+            </div>
           </div>
 
           <div>

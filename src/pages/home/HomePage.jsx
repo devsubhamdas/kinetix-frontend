@@ -1,9 +1,21 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { VideoList, GridContainer, HomePageSkeleton } from "../../components";
 import { useGetVideosByRecommendationQuery } from "../../api/videoApi.js";
 
 function HomePage() {
   const [cursor, setCursor] = useState();
+
+  // Scroll to top always after return
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, []);
+
   const { data, error, isLoading, isFetching } =
     useGetVideosByRecommendationQuery({ cursor });
 

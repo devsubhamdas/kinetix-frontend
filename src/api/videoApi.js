@@ -49,6 +49,20 @@ const videoApi = createApi({
         currentArg?.cursor !== previousArg?.cursor ||
         currentArg?.channelName !== previousArg?.channelName,
     }),
+    getVidoesBySearchTerm: builder.query({
+      query: ({ term, cursor, limit = 10 } = {}) =>
+        `${BASE_URL}/search/videos?q=${term}&limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`,
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      merge: (current, incoming, { arg }) => {
+        if (!arg?.cursor) return incoming;
+        current.data.videos.push(...incoming.data.videos);
+        current.data.meta.nextCursor = incoming.data.meta.nextCursor;
+        current.data.meta.hasNextPage = incoming.data.meta.hasNextPage;
+      },
+      forceRefetch: ({ currentArg, previousArg }) =>
+        currentArg?.cursor !== previousArg?.cursor,
+      keepUnusedDataFor: 0,
+    }),
     uploadVideo: builder.mutation({
       queryFn: async ({ username, data, accessToken }, api) => {
         const url = `${BASE_URL}/channel/${username}/video/upload`;
@@ -88,6 +102,7 @@ export const {
   useGetVideosByRecommendationQuery,
   useGetVideoByIdQuery,
   useGetVideosByChannelNameQuery,
+  useGetVidoesBySearchTermQuery,
   useUploadVideoMutation,
 } = videoApi;
 

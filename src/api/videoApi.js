@@ -60,7 +60,8 @@ const videoApi = createApi({
         current.data.meta.hasNextPage = incoming.data.meta.hasNextPage;
       },
       forceRefetch: ({ currentArg, previousArg }) =>
-        currentArg?.cursor !== previousArg?.cursor,
+        currentArg?.cursor !== previousArg?.cursor ||
+        currentArg?.term !== previousArg?.term,
       keepUnusedDataFor: 0,
     }),
     uploadVideo: builder.mutation({

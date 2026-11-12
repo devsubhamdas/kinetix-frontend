@@ -2,6 +2,7 @@ import React, {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useState,
 } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -9,42 +10,50 @@ import { useGetVidoesBySearchTermQuery } from "../../api/videoApi";
 import { VideoList, SearchPageSkeleton } from "../../components";
 
 const SearchResults = ({ term }) => {
-  const [cursor, setCursor] = useState(null);
   // Scroll to top whenever the search term changes
   useLayoutEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, [term]);
+
+  const [cursor, setCursor] = useState(null);
+  const [sentinelRef, setSentinelRef] = useState(null);
 
   const { data, isLoading, isError, isFetching, error } =
     useGetVidoesBySearchTermQuery(
       { term, cursor },
       { skip: !term, refetchOnMountOrArgChange: true }
     );
-  const videos = data?.data?.videos;
-  const nextCursor = data?.data?.meta?.nextCursor;
+
+  const videos = useMemo(() => {
+    const incoming = data?.data?.videos ?? [];
+    return [...new Map(incoming.map((v) => [v._id, v])).values()];
+  }, [data?.data?.videos]);
+
+  const nextCursor = data?.data?.meta?.nextCursor ?? null;
   const hasMore = data?.data?.meta?.hasNextPage ?? !!nextCursor;
-  const [sentinelRef, setSentinelRef] = useState(null);
 
   const loadMore = useCallback(() => {
-    if (nextCursor && !isFetching) setCursor(nextCursor);
-  }, [nextCursor, isFetching]);
+    // nextCursor === cursor means this page was already requested
+    if (!nextCursor || nextCursor === cursor || isFetching) return;
+    setCursor(nextCursor);
+  }, [nextCursor, cursor, isFetching]);
 
-  // Infinite scroll
+  // Infinite scroll: only observe while idle
   useEffect(() => {
-    const el = sentinelRef;
-    if (!el || !hasMore) return;
+    if (!sentinelRef || !hasMore || isFetching) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) loadMore();
       },
-      { rootMargin: "300px" } // start loading before the user hits the bottom
+      { rootMargin: "300px" }
     );
 
-    observer.observe(el);
+    observer.observe(sentinelRef);
     return () => observer.disconnect();
-  }, [sentinelRef, hasMore, loadMore]);
+  }, [sentinelRef, hasMore, isFetching, loadMore]);
 
+  // error log
   useEffect(() => {
     if (error) console.error("ERROR:: ", error);
   }, [error]);
@@ -53,7 +62,7 @@ const SearchResults = ({ term }) => {
     <div className="px-2 sm:px-4 md:px-0 mb-24 ">
       {isLoading && <SearchPageSkeleton />}
 
-      {!isLoading && !isError && videos && (
+      {!isLoading && !isError && videos.length > 0 && (
         <div className="w-full max-w-4xl mr-0 md:mr-4">
           <div className="md:hidden space-y-6">
             <VideoList

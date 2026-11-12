@@ -6,7 +6,6 @@ function GridContainer({
   rowGap = ".75rem",
   columnGap = ".75rem",
 }) {
-  console.log(colWidth, rowGap, columnGap);
   return (
     <>
       <div

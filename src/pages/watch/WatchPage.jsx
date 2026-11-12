@@ -47,7 +47,7 @@ import {
   openLoginModal,
   closeLoginModal,
 } from "../../features/global/globalSlice.js";
-import useAuth from "../../hooks/useAuth.js";
+import { useInitializeAuth } from "../../hooks/useAuth.js";
 
 function WatchPage() {
   const dispatch = useDispatch();
@@ -59,8 +59,7 @@ function WatchPage() {
   const isAuthenticated = useSelector((state) => state.global.isAuthenticated);
   const loginStatus = useSelector((state) => state.auth.loginStatus);
 
-  const { initializeAuth } = useAuth();
-  initializeAuth();
+  useInitializeAuth();
 
   // get user
   const accessToken = useSelector((state) => state.auth.accessToken);

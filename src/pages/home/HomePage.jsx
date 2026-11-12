@@ -61,14 +61,14 @@ function HomePage() {
     <main className="w-full mb-20">
       {isLoading && (
         <div className="h-dvh overflow-hidden">
-          <GridContainer>
+          <GridContainer colWidth={"22rem"} rowGap="0rem" columnGap="0rem">
             <HomePageSkeleton />
           </GridContainer>
         </div>
       )}
 
       {data?.data?.videos && (
-        <GridContainer>
+        <GridContainer colWidth={"19rem"} rowGap="0rem" columnGap="0rem">
           <VideoList videos={data.data.videos} />
         </GridContainer>
       )}
@@ -78,7 +78,7 @@ function HomePage() {
         <div ref={sentinelRef}>
           {isFetching && (
             <div className="h-dvh overflow-hidden">
-              <GridContainer>
+              <GridContainer colWidth={"22rem"} rowGap="0rem" columnGap="0rem">
                 <HomePageSkeleton />
               </GridContainer>
             </div>

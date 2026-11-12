@@ -28,7 +28,7 @@ function SearchBar({
         </button>
         <form className="block w-full" onSubmit={(e) => handleSearch(e)}>
           <input
-            className="block w-full outline-none border rounded-full py-[2px] sm:py-[4px] px-3
+            className="block text-sm w-full outline-none border rounded-full py-[2px] sm:py-[4px] px-3
               bg-white text-neutral-900 placeholder:text-neutral-500 border-neutral-300 focus:border-blue-600
               dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-400 dark:border-neutral-700
               dark:focus:border-blue-500 transition-all"
@@ -36,6 +36,8 @@ function SearchBar({
             name="search-sm"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search"
+            autoComplete="off"
           />
         </form>
         <button

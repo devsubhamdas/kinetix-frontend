@@ -9,6 +9,7 @@ import StudioLayout from "./studio/StudioLayout";
 import StudioDashboardPage from "./studio/pages/StudioDashboardPage";
 import StudioContentPage from "./studio/pages/StudioContentPage";
 import SignupPage from "./signup/SignupPage";
+import SearchPage from "./search/SearchPage";
 
 export {
   HomePage,
@@ -22,4 +23,5 @@ export {
   StudioDashboardPage,
   StudioContentPage,
   SignupPage,
+  SearchPage,
 };

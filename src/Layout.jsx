@@ -40,9 +40,11 @@ function Layout() {
         isModalOpen={isLoginModalOpen}
       />
       <FlexContainer>
+        {/* LeftNav for large screen only */}
         <LeftNav />
         <Outlet />
       </FlexContainer>
+      {/* BottomNav for small screen only */}
       <BottomNav />
     </>
   );

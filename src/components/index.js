@@ -21,6 +21,7 @@ import {
 } from "./skeleton/WatchPageSkeleton.jsx";
 
 import ChannelPageSkeleton from "./skeleton/ChannelPageSkeleton.jsx";
+import SearchPageSkeleton from "./skeleton/SearchPageSkeleton.jsx";
 
 export {
   BottomNav,
@@ -43,4 +44,5 @@ export {
   RecommendVideoSectionSkeleton,
   WatchPageSkeleton,
   ChannelPageSkeleton,
+  SearchPageSkeleton,
 };

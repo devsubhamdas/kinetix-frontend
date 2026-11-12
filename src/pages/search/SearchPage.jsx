@@ -6,8 +6,7 @@ import React, {
 } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useGetVidoesBySearchTermQuery } from "../../api/videoApi";
-import { VideoList } from "../../components";
-import SearchPageSkeleton from "../../components/skeleton/SearchPageSkeleton";
+import { VideoList, SearchPageSkeleton } from "../../components";
 
 const SearchResults = ({ term }) => {
   const [cursor, setCursor] = useState(null);

@@ -3,6 +3,7 @@ import { CiSearch, CiUser } from "react-icons/ci";
 import { IoClose } from "react-icons/io5";
 import { MdMic } from "react-icons/md";
 import { AiOutlineVideoCameraAdd } from "react-icons/ai";
+import { CiLogout } from "react-icons/ci";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import useLogout from "../../hooks/useLogout";
 import { useSelector } from "react-redux";
@@ -182,7 +183,7 @@ function Navbar({ openModal }) {
                   onClick={logoutHandler}
                 >
                   <div className="flex items-center gap-x-1">
-                    <CiUser className="inline cursor-pointer text-lg md:text-xl lg:text-2xl" />
+                    <CiLogout className="inline cursor-pointer text-lg md:text-xl lg:text-2xl" />
                     <span className="text-xs sm:text-sm md:text-base font-medium">
                       Logout
                     </span>

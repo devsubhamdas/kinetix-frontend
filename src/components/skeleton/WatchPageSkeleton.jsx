@@ -161,7 +161,7 @@ export function WatchPageSkeleton() {
         <Bone className="h-12 md:h-14 lg:h-16 animate-pulse" />
       </div>
       <div className="max-w-[1800px] lg:mx-auto mb-5 md:mb-9 lg:mb-16 dark:bg-neutral-900">
-        <div className="flex flex-col md:flex-row sm:gap-x-4 md:gap-x-7 lg:gap-x-10">
+        <div className="flex flex-col md:flex-row sm:gap-x-1.5 md:gap-x-2.5 lg:gap-x-5">
           <div className="flex-1 min-w-0">
             <VideoSectionSkeleton />
             <div className="mt-4">

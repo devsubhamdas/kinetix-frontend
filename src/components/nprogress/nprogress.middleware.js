@@ -1,6 +1,6 @@
 import { progress } from "./nprogress.config.js";
 
-const SKIP_ENDPOINTS = new Set(["getUser", "getAllCommentsByRefId"]); // example
+const SKIP_ENDPOINTS = new Set(["getUser", "getAllCommentsByRefId"]);
 const TRACK_MUTATIONS = new Set(["createUser", "loginUser", "logoutUser"]);
 
 const ACTION_RE = /\/execute(?:Query|Mutation)\/(pending|fulfilled|rejected)$/;

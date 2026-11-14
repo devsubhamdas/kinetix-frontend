@@ -81,6 +81,7 @@ const SearchResults = ({ term }) => {
               spaceX="space-x-3"
               spaceY="space-y-0"
               fontWeight="font-medium"
+              profileWithChannel={true}
               hideDescription={false}
             />
           </div>

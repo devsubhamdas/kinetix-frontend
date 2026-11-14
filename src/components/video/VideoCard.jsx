@@ -17,6 +17,7 @@ function VideoCard({
   createdAt = "",
   hideDescription = true,
   hideProfile = false,
+  profileWithChannel = false,
   hideChannelName = false,
   cardType = "block",
   cardHeight = "aspect-video",
@@ -27,6 +28,13 @@ function VideoCard({
   spaceY = "space-y-2",
   spaceX = "space-x-0",
 }) {
+  // avatar next to the title (default position)
+  const showDefaultProfile = !hideProfile && !profileWithChannel;
+  // avatar inline with the channel name
+  const showInlineProfile = !hideProfile && profileWithChannel;
+
+  console.log(hideProfile);
+
   const navigate = useNavigate();
 
   const navigateToChannelPage = (e) => {
@@ -53,92 +61,113 @@ function VideoCard({
   };
 
   return (
-    <div>
-      <NavLink
-        to={`/watch/v/${encId}`}
-        className={`${cardType} ${spaceY} ${spaceX} text-neutral-900 dark:text-neutral-100 p-1 md:p-2 lg:p-3 rounded-xl hover:bg-neutral-200 dark:hover:bg-neutral-800 transition`}
-      >
-        <div className={`relative ${cardHeight} ${cardWidth} flex-1`}>
-          {thumbnail ? (
-            <img
-              src={thumbnail}
-              alt=""
-              className="w-full h-full object-cover rounded-xl bg-gray-100 dark:bg-neutral-800"
-            />
-          ) : (
-            <picture>
-              <source
-                srcSet="/assets/default-thumbnail-dark.jpg"
-                media="(prefers-color-scheme: dark)"
-              />
+    <div
+      className={`text-neutral-900 dark:text-neutral-100 p-1 md:p-2 lg:p-3 rounded-xl has-[.thumb:hover]:bg-neutral-200/15 dark:has-[.thumb:hover]:bg-neutral-800/40 transition-all duration-300`}
+    >
+      <NavLink to={`/watch/v/${encId}`} className="thumb">
+        <div className={`${cardType} ${spaceY} ${spaceX}`}>
+          <div className={`relative ${cardHeight} ${cardWidth} flex-1`}>
+            {thumbnail ? (
               <img
-                src="/assets/default-thumbnail.png"
+                src={thumbnail}
                 alt=""
-                className="w-full h-full object-cover rounded-xl"
+                className="aspect-video w-full h-full object-cover rounded-xl bg-gray-100 dark:bg-neutral-800"
+                loading="lazy"
+                decoding="async"
               />
-            </picture>
-          )}
-          <div className="absolute bottom-2 right-2 text-sm font-semibold bg-black bg-opacity-70 px-1 rounded">
-            <span className="text-white">
-              {formatSeconds(Math.round(duration))}
-            </span>
-          </div>
-        </div>
-
-        <div className="flex gap-x-2 flex-1">
-          <div
-            className={hideProfile ? "hidden" : "w-9 aspect-square"}
-            onClick={navigateToChannelPage}
-          >
-            <img
-              src={profile || "/assets/default-avatar.png"}
-              alt=""
-              className="w-full aspect-square rounded-full bg-gray-100 dark:bg-neutral-800"
-            />
-          </div>
-
-          <div className="flex-grow">
-            <h1 className={`${fontSize} ${fontWeight} ${lineHeight}`}>
-              {title}
-            </h1>
-            <h2
-              className={
-                hideChannelName
-                  ? "hidden"
-                  : "inline lg:block text-xs md:text-sm font-semibold mt-1.5 text-gray-600 dark:text-neutral-400"
-              }
-            >
-              <span onClick={navigateToChannelPage}>{channelname} </span>
-            </h2>
-            <div className="text-xs md:text-sm leading-3 text-gray-600 dark:text-neutral-400">
-              <BsDot
-                className={hideProfile ? "hidden" : "inline lg:hidden text-xs"}
-              />
-              <span>{views} views</span>
-              <BsDot className="inline text-xs" />
-              <span>
-                {formatDistanceToNow(new Date(createdAt), {
-                  addSuffix: true,
-                })
-                  .replace("about", "")
-                  .replace("almost", "")}
+            ) : (
+              <picture>
+                <source
+                  srcSet="/assets/default-thumbnail-dark.jpg"
+                  media="(prefers-color-scheme: dark)"
+                />
+                <img
+                  src="/assets/default-thumbnail.png"
+                  alt=""
+                  className="aspect-video w-full h-full object-cover rounded-xl bg-gray-100 dark:bg-neutral-800"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+            )}
+            <div className="absolute bottom-2 right-2 text-sm font-semibold bg-black bg-opacity-70 px-1 rounded">
+              <span className="text-white">
+                {formatSeconds(Math.round(duration))}
               </span>
+            </div>
+          </div>
+
+          <div className="flex gap-y-1.5 gap-x-2 flex-1">
+            <div
+              className={showDefaultProfile ? "w-9 aspect-square" : "hidden"}
+              onClick={navigateToChannelPage}
+            >
+              <img
+                src={profile || "/assets/default-avatar.png"}
+                alt=""
+                className="w-full aspect-square rounded-full bg-gray-100 dark:bg-neutral-800"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+
+            <div className="flex-grow">
+              <h1
+                className={`${fontSize} ${fontWeight} ${lineHeight} line-clamp-2 mb-1`}
+              >
+                {title}
+              </h1>
+              <h2
+                className={
+                  hideChannelName
+                    ? "hidden"
+                    : "inline lg:block text-xs md:text-sm font-semibold mt-1.5 text-gray-600 dark:text-neutral-400"
+                }
+              >
+                <span
+                  onClick={navigateToChannelPage}
+                  className="inline-flex items-center gap-1.5"
+                >
+                  {showInlineProfile && (
+                    <img
+                      src={profile || "/assets/default-avatar.png"}
+                      alt=""
+                      className="w-5 h-5 rounded-full object-cover bg-gray-100 dark:bg-neutral-800"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  )}
+                  {channelname}
+                </span>
+              </h2>
+              <div className="text-xs md:text-sm leading-3 text-gray-600 dark:text-neutral-400">
+                <BsDot className="hidden text-xs" />
+                <span>{views} views</span>
+                <BsDot className="inline text-xs" />
+                <span>
+                  {formatDistanceToNow(new Date(createdAt), {
+                    addSuffix: true,
+                  })
+                    .replace("about", "")
+                    .replace("almost", "")}
+                </span>
+              </div>
+
+              <div>
+                {!hideDescription && description && (
+                  <h2 className="text-xs md:text-sm text-gray-600 dark:text-neutral-400 line-clamp-3">
+                    {description}
+                  </h2>
+                )}
+              </div>
             </div>
 
             <div>
-              {!hideDescription && description && (
-                <h2 className="text-xs md:text-sm text-gray-600 dark:text-neutral-400">
-                  {description}
-                </h2>
-              )}
+              <BsThreeDotsVertical
+                className="text-xl text-gray-600 dark:text-neutral-400"
+                onClick={(e) => e.preventDefault()}
+              />
             </div>
-          </div>
-
-          <div>
-            <BsThreeDotsVertical
-              className="text-xl text-gray-600 dark:text-neutral-400"
-              onClick={(e) => e.preventDefault()}
-            />
           </div>
         </div>
       </NavLink>

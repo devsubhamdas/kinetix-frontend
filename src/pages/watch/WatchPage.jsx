@@ -183,7 +183,7 @@ function WatchPage() {
         {!videoIsLoading && video && (
           <FlexContainer
             className={"flex-col md:flex-row"}
-            gapX="md:gap-x-5 lg:gap-x-10"
+            gapX="md:gap-x-2.5 lg:gap-x-5"
           >
             <VideoSection>
               <VideoPlayer video={video} />
@@ -238,7 +238,7 @@ function WatchPage() {
                 <VideoList
                   videos={data?.data.videos}
                   cardType="flex"
-                  hideProfile={true}
+                  profileWithChannel={true}
                   spaceX="space-x-3"
                   spaceY="space-y-0"
                   fontSize="text-sm lg:text-base"

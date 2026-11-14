@@ -8,7 +8,29 @@
       href="/assets/kinetix-brand-v2/favicon.ico"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="theme-color"
+      content="#ffffff"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#171717"
+      media="(prefers-color-scheme: dark)"
+    />
     <title>Kinetix - a video streaming platform</title>
+    <!-- initial delay css loading fallback style  -->
+    <style>
+      html {
+        background: #ffffff;
+      }
+      @media (prefers-color-scheme: dark) {
+        html {
+          background: #171717;
+        }
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

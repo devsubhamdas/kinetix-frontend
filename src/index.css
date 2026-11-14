@@ -70,6 +70,7 @@
     scrollbar-color: #525252 transparent; /* Firefox */
   }
 
+  html,
   body {
     background: #171717;
   }

@@ -7,6 +7,7 @@ import subscriptionApi from "../api/subscriptionApi.js";
 import impressionApi from "../api/impressionApi.js";
 import authSlice from "../features/auth/authSlice.js";
 import globalSlice from "../features/global/globalSlice.js";
+import progressMiddleware from "../components/nprogress/nprogress.middleware.js";
 
 const store = configureStore({
   reducer: {
@@ -24,7 +25,8 @@ const store = configureStore({
       .concat(userApi.middleware)
       .concat(commentApi.middleware)
       .concat(subscriptionApi.middleware)
-      .concat(impressionApi.middleware),
+      .concat(impressionApi.middleware)
+      .concat(progressMiddleware),
 });
 
 setupListeners(store.dispatch);

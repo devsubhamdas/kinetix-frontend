@@ -12,6 +12,7 @@ import "./index.css";
 import Layout from "./Layout.jsx";
 import { Protected } from "./components/index.js";
 import store from "./app/store.js";
+import { attachNProgress } from "./components/nprogress/nprogress.utils.js";
 
 // Turns a dynamic import into a React Router `lazy` function.
 // Your page files use DEFAULT exports (src/pages/index.js re-exports them
@@ -92,6 +93,8 @@ const router = createBrowserRouter(
     </>
   )
 );
+
+attachNProgress(router);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

@@ -51,6 +51,17 @@
   }
 }
 
+#nprogress .bar {
+  background: #5f20ff !important;
+  height: 3px;
+}
+
+#nprogress .peg {
+  box-shadow:
+    0 0 10px #5f20ff,
+    0 0 5px #5f20ff;
+}
+
 @media (prefers-color-scheme: dark) {
   .scrollbar-thin::-webkit-scrollbar-thumb {
     background: #525252;

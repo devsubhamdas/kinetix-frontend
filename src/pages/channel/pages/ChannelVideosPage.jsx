@@ -6,12 +6,19 @@ import { useParams } from "react-router-dom";
 function ChannelVideosPage() {
   const { username: channelName } = useParams();
   const [cursor, setCursor] = useState();
+
+  // reset pagination when the channel changes
+  // useEffect(() => {
+  //   setCursor(null);
+  // }, [channelName]);
+
   const { data, error, isLoading, isFetching } = useGetVideosByChannelNameQuery(
     {
       channelName,
       cursor,
       limit: 10,
     }
+    // { refetchOnMountOrArgChange: true }
   );
 
   useEffect(() => {
@@ -48,23 +55,23 @@ function ChannelVideosPage() {
       {/* skeleton loading  */}
       {isLoading ||
         (isFetching && (
-          <GridContainer colWidth="14rem">
+          <GridContainer colWidth="20rem">
             {Array.from({ length: 12 }).map((_, i) => (
               <div
                 key={i}
-                className="h-36 animate-pulse bg-gray-100 dark:bg-neutral-800 rounded-xl"
+                className="h-24 sm:h-28 md:h-40 lg:h-52 aspect-video animate-pulse bg-gray-100 dark:bg-neutral-800 rounded-xl"
               ></div>
             ))}
           </GridContainer>
         ))}
       {/* {error && <div>ERROR:: {error.error}</div>} */}
       {data?.data.videos && (
-        <GridContainer colWidth="14rem">
+        <GridContainer colWidth="20rem">
           <VideoList
             videos={data?.data.videos}
             hideProfile={true}
             hideChannelName={true}
-            cardHeight="h-24 sm:h-28 md:h-32 lg:h-36"
+            cardHeight="h-24 sm:h-28 md:h-40 lg:h-52 aspect-video"
             fontSize="text-sm md:text-base"
             cardType="flex justify-between gap-x-1.5 md:block"
             spaceY="space-y-0 lg:space-y-2"
@@ -74,11 +81,11 @@ function ChannelVideosPage() {
       {nextCursor && (
         <div ref={sentinelRef}>
           {isFetching ? (
-            <GridContainer colWidth="14rem">
+            <GridContainer colWidth="20rem">
               {Array.from({ length: 12 }).map((_, i) => (
                 <div
                   key={i}
-                  className="h-36 animate-pulse bg-gray-100 dark:bg-neutral-800 rounded-xl"
+                  className="h-24 sm:h-28 md:h-40 lg:h-52 aspect-video animate-pulse bg-gray-100 dark:bg-neutral-800 rounded-xl"
                 ></div>
               ))}
             </GridContainer>

@@ -33,8 +33,6 @@ function VideoCard({
   // avatar inline with the channel name
   const showInlineProfile = !hideProfile && profileWithChannel;
 
-  console.log(hideProfile);
-
   const navigate = useNavigate();
 
   const navigateToChannelPage = (e) => {

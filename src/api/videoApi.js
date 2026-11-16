@@ -33,21 +33,43 @@ const videoApi = createApi({
       }),
     }),
     getVideosByChannelName: builder.query({
-      query: ({ channelName, cursor, limit = 20 } = {}) =>
-        `/channel/${channelName}/videos?limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`,
-      // One cache entry no matter what the cursor is
-      serializeQueryArgs: ({ endpointName }) => endpointName,
-      // Append new pages (or replace when starting from the beginning)
+      query: ({ channelName, cursor, limit = 20, sortBy = "newest" } = {}) =>
+        `/channel/${channelName}/videos?limit=${limit}${sortBy ? `&sortBy=${sortBy}` : ""}${cursor ? `&cursor=${cursor}` : ""}`,
+
+      // Separate cache entry per channel + sort + limit (cursor excluded on purpose)
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        const { channelName, sortBy = "newest", limit = 20 } = queryArgs ?? {};
+        return `${endpointName}(${channelName}|${sortBy}|${limit})`;
+      },
+
       merge: (currentCache, newData, { arg }) => {
+        // First page -> replace everything
         if (!arg?.cursor) return newData;
-        currentCache.data.videos.push(...newData.data.videos);
+
+        // Next pages -> append, skipping any ids we already have
+        const seen = new Set(currentCache.data.videos.map((v) => v._id));
+        const fresh = newData.data.videos.filter((v) => !seen.has(v._id));
+        currentCache.data.videos.push(...fresh);
         currentCache.data.nextCursor = newData.data.nextCursor;
         currentCache.data.hasNextPage = newData.data.hasNextPage;
       },
-      // Refetch whenever the cursor changes or channel name changes
+
+      // Only a cursor change should trigger a "load more" fetch
       forceRefetch: ({ currentArg, previousArg }) =>
-        currentArg?.cursor !== previousArg?.cursor ||
-        currentArg?.channelName !== previousArg?.channelName,
+        currentArg?.cursor !== previousArg?.cursor,
+      // // One cache entry no matter what the cursor is
+      // serializeQueryArgs: ({ endpointName }) => endpointName,
+      // // Append new pages (or replace when starting from the beginning)
+      // merge: (currentCache, newData, { arg }) => {
+      //   if (!arg?.cursor) return newData;
+      //   currentCache.data.videos.push(...newData.data.videos);
+      //   currentCache.data.nextCursor = newData.data.nextCursor;
+      //   currentCache.data.hasNextPage = newData.data.hasNextPage;
+      // },
+      // // Refetch whenever the cursor changes or channel name changes
+      // forceRefetch: ({ currentArg, previousArg }) =>
+      //   currentArg?.cursor !== previousArg?.cursor ||
+      //   currentArg?.channelName !== previousArg?.channelName,
     }),
     getVidoesBySearchTerm: builder.query({
       query: ({ term, cursor, limit = 10 } = {}) =>

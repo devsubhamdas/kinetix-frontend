@@ -37,7 +37,7 @@ function LeftNav() {
 
   return (
     <aside>
-      <nav className="sticky top-[72px]">
+      <nav className="sticky top-[72px] overflow-y-auto overscroll-contain">
         <div
           className="hidden md:block md:w-[200px] lg:w-[236px] divide-y pb-4 ml-3
                      max-h-[calc(100vh-72px)] overflow-y-scroll scrollbar-thin scrollbar-on-hover

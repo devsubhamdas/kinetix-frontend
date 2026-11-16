@@ -93,7 +93,9 @@ function Layout() {
       <FlexContainer>
         {/* LeftNav for large screen only */}
         <LeftNav />
-        <Outlet />
+        <div className="h-[calc(100vh-72px)] flex-1 overflow-y-auto overscroll-contain">
+          <Outlet />
+        </div>
       </FlexContainer>
       {/* BottomNav for small screen only */}
       <BottomNav />

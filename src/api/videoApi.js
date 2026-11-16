@@ -10,7 +10,7 @@ const videoApi = createApi({
   endpoints: (builder) => ({
     getVideosByRecommendation: builder.query({
       query: ({ cursor, limit = 20 } = {}) =>
-        `/recommend/videos?limit=${limit}&cursor=${cursor ?? ""}`,
+        `/recommend/videos?limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`,
       // One cache entry no matter what the cursor is
       serializeQueryArgs: ({ endpointName }) => endpointName,
       // Append new pages (or replace when starting from the beginning)
@@ -34,7 +34,7 @@ const videoApi = createApi({
     }),
     getVideosByChannelName: builder.query({
       query: ({ channelName, cursor, limit = 20 } = {}) =>
-        `/channel/${channelName}/videos?limit=${limit}&cursor=${cursor ?? ""}`,
+        `/channel/${channelName}/videos?limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`,
       // One cache entry no matter what the cursor is
       serializeQueryArgs: ({ endpointName }) => endpointName,
       // Append new pages (or replace when starting from the beginning)
@@ -96,6 +96,12 @@ const videoApi = createApi({
         }
       },
     }),
+    incrementVideoViewsCount: builder.mutation({
+      query: ({ id } = {}) => ({
+        url: `/videos/add-view/${id}`,
+        method: "PATCH",
+      }),
+    }),
   }),
 });
 
@@ -105,6 +111,7 @@ export const {
   useGetVideosByChannelNameQuery,
   useGetVidoesBySearchTermQuery,
   useUploadVideoMutation,
+  useIncrementVideoViewsCountMutation,
 } = videoApi;
 
 export default videoApi;

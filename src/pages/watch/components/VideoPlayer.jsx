@@ -2,17 +2,58 @@ import React, { useEffect, useMemo, useRef } from "react";
 import { IKVideoPlayer } from "@imagekit/video-player/react";
 import { videoPlayer } from "@imagekit/video-player";
 import "@imagekit/video-player/styles.css";
+import { useIncrementVideoViewsCountMutation } from "../../../api/videoApi";
+
+const VIEW_THRESHOLD_SECONDS = 3;
 
 function VideoPlayer({ video }) {
+  const playpackUrl = video?.data?.videoFile;
+  const videoId = video?.data?._id;
+  const [incrementViews] = useIncrementVideoViewsCountMutation();
+
+  const watchedRef = useRef(0); // seconds actually played
+  const lastTimeRef = useRef(null); // previous currentTime sample
+  const countedRef = useRef(false); // already counted for this video?
+
+  const handleTimeUpdate = (e) => {
+    if (countedRef.current) return;
+
+    const current = e.currentTarget.currentTime;
+
+    if (lastTimeRef.current !== null) {
+      const delta = current - lastTimeRef.current;
+      // timeupdate fires ~every 250ms during normal playback;
+      // larger jumps are seeks, so ignore them
+      if (delta > 0 && delta < 1) watchedRef.current += delta;
+    }
+    lastTimeRef.current = current;
+
+    if (watchedRef.current >= VIEW_THRESHOLD_SECONDS) {
+      countedRef.current = true;
+      incrementViews({ id: videoId })
+        .unwrap()
+        .catch((err) => console.error("IncrementViewError::", err));
+    }
+  };
+
+  // break the delta chain so pauses/seeks/buffering don't add time
+  const resetLastTime = () => {
+    lastTimeRef.current = null;
+  };
+
   return (
     <>
       <div className="aspect-video mb-2 bg-black md:rounded-xl md:overflow-hidden md:ml-3 lg:ml-0">
         <video
-          src={video?.data?.videoFile}
+          src={playpackUrl}
           controls
           controlsList="nodownload"
           autoPlay
           className="w-full h-full"
+          onTimeUpdate={handleTimeUpdate}
+          onSeeking={resetLastTime}
+          onPause={resetLastTime}
+          onWaiting={resetLastTime}
         />
       </div>
     </>

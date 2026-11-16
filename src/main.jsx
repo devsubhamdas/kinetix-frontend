@@ -44,9 +44,14 @@ const pages = {
   channelLayout: page(() => import("./pages/channel/ChannelLayout")),
   channelHome: page(() => import("./pages/channel/pages/ChannelHomePage")),
   channelVideos: page(() => import("./pages/channel/pages/ChannelVideosPage")),
+  channelLive: page(() => import("./pages/channel/pages/ChannelLivePage")),
   channelCommunity: page(
     () => import("./pages/channel/pages/ChannelCommunityPage")
   ),
+  channelPlaylist: page(
+    () => import("./pages/channel/pages/ChannelPlaylistPage")
+  ),
+  channelAbout: page(() => import("./pages/channel/pages/ChannelAboutPage")),
   watch: page(() => import("./pages/watch/WatchPage")),
   post: page(() => import("./pages/post/PostPage")),
   signup: page(() => import("./pages/signup/SignupPage")),
@@ -68,7 +73,10 @@ const router = createBrowserRouter(
         <Route path="channel/:username" lazy={pages.channelLayout}>
           <Route index lazy={pages.channelHome} />
           <Route path="videos" lazy={pages.channelVideos} />
+          <Route path="live" lazy={pages.channelLive} />
           <Route path="community" lazy={pages.channelCommunity} />
+          <Route path="playlists" lazy={pages.channelPlaylist} />
+          <Route path="about" lazy={pages.channelAbout} />
         </Route>
         <Route path="post/:username/p_id/:id" lazy={pages.post} />
         <Route path="signup" lazy={pages.signup} />

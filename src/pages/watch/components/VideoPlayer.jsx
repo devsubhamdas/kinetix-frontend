@@ -8,7 +8,7 @@ const VIEW_THRESHOLD_SECONDS = 3;
 
 function VideoPlayer({ video }) {
   const playpackUrl = video?.data?.videoFile;
-  const videoId = video?.data?._id;
+  const videoId = video?.data?.encId;
   const [incrementViews] = useIncrementVideoViewsCountMutation();
 
   const watchedRef = useRef(0); // seconds actually played

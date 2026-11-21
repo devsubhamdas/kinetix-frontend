@@ -20,13 +20,21 @@ import { RiMovie2Line } from "react-icons/ri";
 import { SiYoutubegaming } from "react-icons/si";
 import { useSelector } from "react-redux";
 
-function NavItem({ to, icon: Icon, label }) {
+function NavItem({ to, icon: Icon, label, end = false }) {
   return (
-    <NavLink to={to}>
-      <div className="flex items-center gap-x-4 px-5 py-2 rounded-lg hover:bg-slate-200 dark:hover:bg-neutral-700">
-        <Icon className={`text-2xl`} />
-        <span>{label}</span>
-      </div>
+    <NavLink to={to} end={end || to === "/"}>
+      {({ isActive }) => (
+        <div
+          className={`flex items-center gap-x-4 px-5 py-2 rounded-lg transition-all duration-300 ${
+            isActive
+              ? "bg-gray-200/50 dark:bg-neutral-700/60"
+              : "hover:bg-gray-200/35 dark:hover:bg-neutral-700/35"
+          }`}
+        >
+          <Icon className="text-2xl" />
+          <span>{label}</span>
+        </div>
+      )}
     </NavLink>
   );
 }
@@ -60,44 +68,56 @@ function LeftNav() {
             />
           </div>
 
-          <div className="flex flex-col py-3">
-            <span className="text-xl font-semibold px-5">You</span>
-            <NavItem to="/feed/history" icon={LuHistory} label="History" />
-            <NavItem
-              to="/feed/playlist"
-              icon={RiPlayList2Fill}
-              label="Playlist"
-            />
-            {isLoggedIn && (
+          {isLoggedIn && (
+            <div className="flex flex-col py-3">
+              <span className="text-xl font-semibold px-5">You</span>
+              <NavItem to="/feed/history" icon={LuHistory} label="History" />
+              <NavItem
+                to="/feed/playlist"
+                icon={RiPlayList2Fill}
+                label="Playlist"
+              />
+
               <NavItem
                 to={`/channel/${user.username}`}
                 icon={GrChannel}
                 label="Your Channel"
+                end
               />
-            )}
-            <NavItem
-              to="/channel/YourChannelName/videos"
-              icon={MdOndemandVideo}
-              label="Your Videos"
-            />
-            <NavItem
-              to="/playlists/watch-later"
-              icon={MdOutlineWatchLater}
-              label="Watch later"
-            />
-            <NavItem to="/playlists/" icon={BiLike} label="Liked Videos" />
-          </div>
+
+              <NavItem
+                to={`/channel/${user.username}/videos`}
+                icon={MdOndemandVideo}
+                label="Your Videos"
+              />
+
+              <NavItem
+                to="/playlists/watch-later"
+                icon={MdOutlineWatchLater}
+                label="Watch later"
+              />
+              <NavItem to="/playlists/" icon={BiLike} label="Liked Videos" />
+            </div>
+          )}
 
           <div className="flex flex-col py-3">
             <span className="text-xl font-semibold px-5">Explore</span>
-            <NavItem to="/" icon={BsFire} label="Trending" />
-            <NavItem to="/" icon={IoMusicalNotesOutline} label="Music" />
-            <NavItem to="/" icon={RiMovie2Line} label="Movies" />
-            <NavItem to="/" icon={BsBroadcast} label="Live" />
-            <NavItem to="/" icon={SiYoutubegaming} label="Gaming" />
-            <NavItem to="/" icon={BiTrophy} label="Sports" />
-            <NavItem to="/" icon={MdNewspaper} label="News" />
-            <NavItem to="/" icon={MdOutlinePodcasts} label="Podcasts" />
+            <NavItem to="/feed/trending" icon={BsFire} label="Trending" />
+            <NavItem
+              to="/feed/music"
+              icon={IoMusicalNotesOutline}
+              label="Music"
+            />
+            <NavItem to="/feed/movies" icon={RiMovie2Line} label="Movies" />
+            <NavItem to="/feed/live" icon={BsBroadcast} label="Live" />
+            <NavItem to="/feed/gaming" icon={SiYoutubegaming} label="Gaming" />
+            <NavItem to="/feed/sports" icon={BiTrophy} label="Sports" />
+            <NavItem to="/feed/news" icon={MdNewspaper} label="News" />
+            <NavItem
+              to="/feed/podcasts"
+              icon={MdOutlinePodcasts}
+              label="Podcasts"
+            />
           </div>
         </div>
       </nav>

@@ -10,6 +10,7 @@ const shouldTrack = (action) => {
   if (!arg?.endpointName) return false;
   if (SKIP_ENDPOINTS.has(arg.endpointName)) return false;
   if (arg.type === "mutation") return TRACK_MUTATIONS.has(arg.endpointName);
+  if (arg.forceRefetch) return false; // refetch from tag invalidation, refetch(), refetchOnFocus
   return true;
 };
 

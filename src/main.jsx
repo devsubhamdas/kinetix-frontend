@@ -41,6 +41,9 @@ const protectedPage = (importFn) => async () => {
 const pages = {
   home: page(() => import("./pages/home/HomePage")),
   search: page(() => import("./pages/search/SearchPage")),
+  subscription: protectedPage(
+    () => import("./pages/subscription/SubscriptionPage")
+  ),
   channelLayout: page(() => import("./pages/channel/ChannelLayout")),
   channelHome: page(() => import("./pages/channel/pages/ChannelHomePage")),
   channelVideos: page(() => import("./pages/channel/pages/ChannelVideosPage")),
@@ -69,6 +72,7 @@ const router = createBrowserRouter(
     <>
       <Route path="/" element={<Layout />} HydrateFallback={PageLoader}>
         <Route index lazy={pages.home} />
+        <Route path="feed/subscriptions" lazy={pages.subscription} />
         <Route path="results" lazy={pages.search} />
         <Route path="channel/:username" lazy={pages.channelLayout}>
           <Route index lazy={pages.channelHome} />

@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useGetVideosByChannelNameQuery } from "../../../api/videoApi";
 import { VideoList } from "../../../components";
 
 function ChannelHomePage() {
   const { username: channelName } = useParams();
-  const [cursor, setCursor] = useState();
   const { data, error, isLoading } = useGetVideosByChannelNameQuery({
     channelName,
     limit: 3,
@@ -20,9 +19,9 @@ function ChannelHomePage() {
 
   return (
     <>
-      <div className="max-w-2xl mb-12">
-        <div className="mx-4 my-2">
-          <span className="text-neutral-800 dark:text-neutral-200 font-semibold text-sm lg:text-lg">
+      <div className="max-w-2xl mb-20">
+        <div className="mx-2 md:mx-4 my-2">
+          <span className="text-neutral-800 dark:text-neutral-200 font-semibold text-sm md:text-base lg:text-lg">
             Popular Videos
           </span>
         </div>
@@ -30,7 +29,7 @@ function ChannelHomePage() {
           videos={data?.data.videos}
           hideProfile={true}
           hideChannelName={true}
-          cardHeight="h-24 sm:h-28 md:h-40 lg:h-52 aspect-video"
+          cardHeight="h-32 sm:h-44 md:h-48 lg:h-52 aspect-video"
           fontSize="text-sm md:text-base"
           cardType="flex justify-between gap-x-1.5"
           spaceY="space-y-0 lg:space-y-2"
